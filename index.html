@@ -550,6 +550,34 @@
               />
             </div>
 
+            <!-- DATOS DE CONTACTO (SOLO PARA HISTORIAL ADMINISTRATIVO, NO SALEN EN EL CERTIFICADO) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="input-winner-email" class="block font-tradeExtended font-bold text-[10px] uppercase tracking-[0.14em] text-[#b7a387] mb-1">
+                  Correo Electrónico
+                </label>
+                <input 
+                  type="email" 
+                  id="input-winner-email" 
+                  placeholder="ejemplo@correo.com" 
+                  class="app-input py-2 text-xs"
+                  autocomplete="off"
+                />
+              </div>
+              <div>
+                <label for="input-winner-phone" class="block font-tradeExtended font-bold text-[10px] uppercase tracking-[0.14em] text-[#b7a387] mb-1">
+                  Teléfono
+                </label>
+                <input 
+                  type="tel" 
+                  id="input-winner-phone" 
+                  placeholder="+52 998 000 0000" 
+                  class="app-input py-2 text-xs"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
             <!-- 2. SELECCIÓN DE BENEFICIO (3 OPCIONES OFICIALES) -->
             <div>
               <label class="block font-tradeExtended font-bold text-[11px] uppercase tracking-[0.14em] text-[#b7a387] mb-2">
@@ -584,7 +612,7 @@
                     </span>
                   </div>
                   <p class="font-gilroy text-[11px] text-[#949fa6] mt-1">
-                    Motos acuáticas de última generación en laguna o mar abierto.
+                    Renta de jetsky por 30 o 60 minutos
                   </p>
                 </div>
 
@@ -833,6 +861,8 @@
             <tr class="border-b border-white/10 text-[#949fa6] font-tradeExtended uppercase tracking-wider text-[10px]">
               <th class="py-2.5 px-3">Folio</th>
               <th class="py-2.5 px-3">Ganador</th>
+              <th class="py-2.5 px-3">Correo</th>
+              <th class="py-2.5 px-3">Teléfono</th>
               <th class="py-2.5 px-3">Beneficio</th>
               <th class="py-2.5 px-3">Vence</th>
             </tr>
@@ -929,7 +959,7 @@
         title: '15% de descuento en renta de Jetski.',
         tag: '15% OFF',
         certTitle: '15% DE DESCUENTO EN RENTA DE JETSKI.',
-        certDesc: 'Motos acuáticas de última generación en laguna o mar abierto.'
+        certDesc: 'Renta de jetsky por 30 o 60 minutos'
       },
       {
         id: 'casa',
@@ -1040,6 +1070,10 @@
       if (btnReset) {
         btnReset.addEventListener('click', () => {
           if (inputName) inputName.value = '';
+          const emailInput = document.getElementById('input-winner-email');
+          const phoneInput = document.getElementById('input-winner-phone');
+          if (emailInput) emailInput.value = '';
+          if (phoneInput) phoneInput.value = '';
           state.winnerName = '';
           state.folio = generateUniqueFolio();
           if (inputFolio) inputFolio.value = state.folio;
@@ -1340,9 +1374,14 @@
     // ========================================================
     function recordWinner() {
       const promo = PROMOTIONS[state.selectedOptionIndex];
+      const emailEl = document.getElementById('input-winner-email');
+      const phoneEl = document.getElementById('input-winner-phone');
+
       const record = {
         folio: state.folio,
         name: state.winnerName.trim(),
+        email: emailEl ? emailEl.value.trim() : '',
+        phone: phoneEl ? phoneEl.value.trim() : '',
         promo: promo.title,
         expiry: formatDateSpanish(state.expiryDate)
       };
@@ -1350,7 +1389,7 @@
       try {
         let history = JSON.parse(localStorage.getItem('MARINA_CERT_HISTORY') || '[]');
         history.unshift(record);
-        if (history.length > 30) history = history.slice(0, 30);
+        if (history.length > 50) history = history.slice(0, 50);
         localStorage.setItem('MARINA_CERT_HISTORY', JSON.stringify(history));
         renderHistory(history);
       } catch (e) {}
@@ -1370,7 +1409,7 @@
       if (!tbody) return;
 
       if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-xs text-[#67737a]">No hay folios emitidos en este dispositivo.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-xs text-[#67737a]">No hay folios emitidos en este dispositivo.</td></tr>';
         return;
       }
 
@@ -1378,6 +1417,8 @@
         <tr class="border-b border-white/5 hover:bg-white/[0.02]">
           <td class="py-2.5 px-3 font-mono font-bold text-[#b7a387]">${item.folio}</td>
           <td class="py-2.5 px-3 text-white font-medium">${item.name}</td>
+          <td class="py-2.5 px-3 text-[#949fa6] font-mono text-[11px]">${item.email || '—'}</td>
+          <td class="py-2.5 px-3 text-[#949fa6] font-mono text-[11px]">${item.phone || '—'}</td>
           <td class="py-2.5 px-3 text-[#c4ced3]">${item.promo}</td>
           <td class="py-2.5 px-3 font-mono text-[#ece5d8]">${item.expiry}</td>
         </tr>
