@@ -72,7 +72,7 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Formularios y Controles Minimalistas */
+    /* Formularios y Controles Minimalistas (Sin Colores Fluorescentes) */
     .app-input {
       width: 100%;
       background: rgba(255, 255, 255, 0.04);
@@ -86,7 +86,7 @@
     }
     .app-input:focus {
       outline: none;
-      border-color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.35);
       background: rgba(255, 255, 255, 0.07);
     }
     .app-input::placeholder {
@@ -110,10 +110,10 @@
     }
     .benefit-option-card.active {
       background: rgba(255, 255, 255, 0.06);
-      border-color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Botón Primario: Alto Contraste y Minimalismo (Sin Dorado) */
+    /* Botón Primario: Alto Contraste y Minimalismo (Sin Dorado ni Neón) */
     .btn-primary-action {
       display: inline-flex;
       align-items: center;
@@ -145,6 +145,7 @@
       cursor: not-allowed;
     }
 
+    /* Botón Secundario Fiel al Formato de la Página (Sin Texto Blanco) */
     .btn-secondary-action {
       display: inline-flex;
       align-items: center;
@@ -152,7 +153,7 @@
       gap: 0.375rem;
       background: transparent;
       color: #949fa6;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 6px;
       padding: 0.4rem 0.75rem;
       font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
@@ -164,9 +165,9 @@
       transition: all 0.15s ease;
     }
     .btn-secondary-action:hover {
-      color: #FFFFFF;
-      border-color: rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.04);
+      color: #c4ced3;
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.03);
     }
 
     /* ========================================================
@@ -273,23 +274,34 @@
       letter-spacing: 0.04em;
     }
 
-    /* 3. Nombre del Ganador */
+    /* 3. Nombre del Ganador (Alineado con Respiración y Separación Sobre la Línea) */
     .cert-recipient-block {
       text-align: center;
       margin-top: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .cert-recipient-name {
       font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
       font-size: 2rem; /* 32px */
       font-weight: 700;
       color: #FFFFFF;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-      padding-bottom: 6px;
-      display: inline-block;
-      min-width: 480px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+      letter-spacing: 0.03em;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      text-align: center;
+      max-width: 680px;
+      word-break: break-word;
+    }
+    .cert-name-underline {
+      width: 520px;
+      max-width: 85%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.25);
+      margin: 0 auto;
     }
 
     /* 4. Caja de Beneficio / Cupón (Cuadrada y Precisa) */
@@ -414,31 +426,6 @@
       margin: 0 auto;
     }
 
-    /* Botón flotante para vista pública escaneada */
-    .btn-public-download {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      background: #FFFFFF;
-      color: #0C2340;
-      border: 1px solid #FFFFFF;
-      border-radius: 30px;
-      padding: 0.75rem 1.75rem;
-      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 0.8125rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.2);
-      transition: all 0.15s ease;
-    }
-    .btn-public-download:hover {
-      background: #E2E8F0;
-      transform: translateY(-1px);
-    }
-
     /* Impresión */
     @media print {
       body {
@@ -446,7 +433,7 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      header, footer, aside, .control-panel, #history-section, #qr-verify-banner, #public-footer-actions {
+      header, footer, aside, .control-panel, #history-section {
         display: none !important;
       }
       .certificate-preview-container {
@@ -465,35 +452,6 @@
   </style>
 </head>
 <body class="bg-black text-white antialiased selection:bg-white selection:text-black">
-
-  <!-- ==========================================
-       BANNER DE VERIFICACIÓN OFICIAL (MODO ESCANEO)
-       ========================================== -->
-  <div id="qr-verify-banner" class="hidden border-b border-emerald-500/30 bg-emerald-950/40 backdrop-blur-md px-4 py-3 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-      <div class="flex items-center gap-2.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <div>
-          <span class="font-tradeExtended font-bold uppercase tracking-wider text-emerald-300 block">
-            Certificado Verificado Oficialmente
-          </span>
-          <span id="banner-verify-details" class="font-gilroy text-emerald-100/80 text-[11px]">
-            Folio cargado y validado en tiempo real.
-          </span>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <button type="button" id="btn-banner-download-pdf" class="btn-primary-action !py-1.5 !px-3 !text-xs !w-auto">
-          <i data-lucide="file-down" class="w-3.5 h-3.5"></i>
-          <span>Descargar PDF</span>
-        </button>
-        <button type="button" onclick="window.print()" class="btn-secondary-action !py-1.5 !px-3 !text-xs">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-          <span>Imprimir</span>
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- ==========================================
        BARRA SUPERIOR (HEADER MINIMALISTA)
@@ -537,6 +495,18 @@
         </a>
       </div>
 
+      <!-- Botón de Descarga Discreto para Modo Público Escaneado -->
+      <div id="header-public-download" class="hidden flex items-center gap-2">
+        <button type="button" onclick="downloadCertificatePDF()" class="btn-secondary-action !text-[#c4ced3]">
+          <i data-lucide="file-down" class="w-3.5 h-3.5 text-[#b7a387]"></i>
+          <span>Descargar PDF</span>
+        </button>
+        <button type="button" onclick="window.print()" class="btn-secondary-action">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span>Imprimir</span>
+        </button>
+      </div>
+
     </div>
   </header>
 
@@ -548,7 +518,7 @@
       
       <!-- ==========================================
            COLUMNA IZQUIERDA: PANEL DE CONTROL
-           (Oculto al escanear QR para evitar que creen certificados)
+           (Se oculta automáticamente al escanear QR)
            ========================================== -->
       <aside id="control-panel-aside" class="lg:col-span-5 control-panel space-y-4">
         
@@ -756,11 +726,12 @@
                   </div>
                 </div>
 
-                <!-- 3. NOMBRE DEL GANADOR -->
+                <!-- 3. NOMBRE DEL GANADOR (SEPARADO Y ALINEADO SOBRE LA LÍNEA) -->
                 <div class="cert-recipient-block">
                   <div id="cert-winner-name" class="cert-recipient-name">
                     Nombre del Ganador
                   </div>
+                  <div class="cert-name-underline" aria-hidden="true"></div>
                 </div>
 
                 <!-- 4. BENEFICIO / CUPÓN CUADRADO -->
@@ -832,7 +803,7 @@
 
     <!-- ==========================================
          SECCIÓN DE HISTORIAL DE CERTIFICADOS
-         (Protegido con Contraseña Criptográfica para Eliminar)
+         (Botón integrado fiel al formato de la página)
          ========================================== -->
     <section id="history-section" class="mt-12 bg-[#080C14] border border-white/10 rounded-xl p-6">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-white/10 gap-3">
@@ -848,9 +819,9 @@
           <span id="history-count" class="font-mono text-xs px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[#b7a387]">
             0
           </span>
-          <!-- Botón Eliminar Historial -->
-          <button type="button" id="btn-open-clear-modal" class="btn-secondary-action !text-rose-400 !border-rose-500/30 hover:!border-rose-400 hover:!bg-rose-500/10">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <!-- Botón Eliminar Historial con Estilo Discreto de la Página (Sin Blanco / Sin Neón) -->
+          <button type="button" id="btn-open-clear-modal" class="btn-secondary-action !text-[#949fa6] !border-white/10 hover:!text-[#c4ced3] hover:!border-white/20">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-[#67737a]"></i>
             <span>Eliminar Historial</span>
           </button>
         </div>
@@ -881,7 +852,7 @@
 
   <!-- ==========================================
        MODAL DE AUTORIZACIÓN: ELIMINAR HISTORIAL
-       (Contraseña Oculta con Hash Criptográfico SHA-256)
+       (Paleta Sobria de la Página, Cero Colores Fluorescentes)
        ========================================== -->
   <div id="clear-history-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-[#0B111D] border border-white/15 rounded-xl max-w-sm w-full p-6 shadow-2xl relative">
@@ -913,7 +884,7 @@
             class="app-input !font-mono !tracking-widest text-center"
             autocomplete="off"
           />
-          <p id="password-error-msg" class="font-gilroy text-xs text-rose-400 mt-1.5 hidden flex items-center gap-1">
+          <p id="password-error-msg" class="font-gilroy text-xs text-[#b7a387] mt-1.5 hidden flex items-center gap-1">
             <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
             <span>Contraseña incorrecta. Acceso denegado.</span>
           </p>
@@ -923,25 +894,13 @@
           <button type="button" id="btn-cancel-modal" class="btn-secondary-action !py-2">
             Cancelar
           </button>
-          <button type="button" id="btn-confirm-clear" class="btn-primary-action !bg-rose-600 !text-white !border-rose-600 hover:!bg-rose-700 !w-auto !py-2 !px-4">
+          <button type="button" id="btn-confirm-clear" class="btn-secondary-action !text-[#b7a387] !border-[#b7a387]/30 hover:!bg-[#b7a387]/10 hover:!border-[#b7a387]/50 !py-2 !px-4">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             <span>Confirmar</span>
           </button>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- BOTÓN FLOTANTE EN MODO ESCANEO PÚBLICO -->
-  <div id="public-footer-actions" class="hidden fixed bottom-0 inset-x-0 z-40 p-4 bg-black/90 border-t border-white/10 flex items-center justify-center gap-3">
-    <button type="button" id="btn-public-download-pdf" class="btn-public-download">
-      <i data-lucide="file-down" class="w-4 h-4"></i>
-      <span>Descargar Certificado en PDF</span>
-    </button>
-    <button type="button" onclick="window.print()" class="btn-secondary-action !rounded-full !py-2.5 !px-4">
-      <i data-lucide="printer" class="w-4 h-4"></i>
-      <span>Imprimir</span>
-    </button>
   </div>
 
   <!-- ==========================================
@@ -1029,8 +988,6 @@
       const btnRegenFolio = document.getElementById('btn-regen-folio');
       const btnReset = document.getElementById('btn-reset-form');
       const btnGenerate = document.getElementById('btn-generate-pdf');
-      const btnBannerPdf = document.getElementById('btn-banner-download-pdf');
-      const btnPublicPdf = document.getElementById('btn-public-download-pdf');
 
       // Modal de eliminar historial
       setupHistoryClearModal();
@@ -1100,8 +1057,6 @@
 
       // 6. Botones Generar / Descargar PDF
       if (btnGenerate) btnGenerate.addEventListener('click', downloadCertificatePDF);
-      if (btnBannerPdf) btnBannerPdf.addEventListener('click', downloadCertificatePDF);
-      if (btnPublicPdf) btnPublicPdf.addEventListener('click', downloadCertificatePDF);
 
       // 7. Inicializar Escalador, QR y Render Inicial
       initScaler();
@@ -1123,7 +1078,9 @@
       function bindLogo(el, primarySrc, b64Fallback) {
         if (!el) return;
         el.onerror = function() {
-          if (b64Fallback && el.src !== b64Fallback) el.src = b64Fallback;
+          if (b64Fallback && el.src !== b64Fallback) {
+            el.src = b64Fallback;
+          }
         };
         el.src = primarySrc;
       }
@@ -1165,8 +1122,8 @@
     }
 
     // ========================================================
-    // PROTECCIÓN DE SEGURIDAD AL ESCANEAR EL QR
-    // (CERO ERROR 404, CERO GENERADOR VISIBLE, SOLO ABRE EL PDF)
+    // MODO ESCANEO LIMPIO: CERO BANNERS FLUORESCENTES, CERO GENERADOR
+    // Muestra ÚNICAMENTE el Certificado Oficial y Abre el PDF
     // ========================================================
     function checkUrlParameters() {
       try {
@@ -1192,8 +1149,8 @@
           state.expiryDate = calculateExpiry(state.issueDate);
         }
 
-        // SI FUE ESCANEADO POR UN TERCERO:
-        // Bloquear completamente el generador, ocultar formulario e historial
+        // SI FUE ESCANEADO:
+        // Quita TODO lo que el usuario no debe ver (formulario, historial, botones admin, banners)
         if (isScan && folioParam) {
           state.isPublicScanMode = true;
 
@@ -1202,11 +1159,11 @@
             window.history.replaceState(null, '', window.location.href);
           }
 
-          // 1. Ocultar completamente el panel de control (generador)
+          // 1. Eliminar panel de control del formulario
           const controlPanel = document.getElementById('control-panel-aside');
           if (controlPanel) controlPanel.remove();
 
-          // 2. Ocultar sección de historial y botones administrativos
+          // 2. Eliminar historial y acciones administrativas
           const historySection = document.getElementById('history-section');
           if (historySection) historySection.remove();
 
@@ -1216,7 +1173,7 @@
           const previewHeader = document.getElementById('preview-header-bar');
           if (previewHeader) previewHeader.remove();
 
-          // 3. Expandir la vista del certificado a pantalla completa centrada
+          // 3. Expandir únicamente la vista del certificado al centro de la pantalla
           const certSection = document.getElementById('certificate-preview-section');
           if (certSection) {
             certSection.className = 'col-span-12 w-full flex flex-col items-center justify-center';
@@ -1227,22 +1184,14 @@
             mainGrid.className = 'w-full flex flex-col items-center justify-center';
           }
 
-          // 4. Mostrar banner de verificación oficial y barra inferior pública
-          const verifyBanner = document.getElementById('qr-verify-banner');
-          const detailsEl = document.getElementById('banner-verify-details');
-          if (verifyBanner) verifyBanner.classList.remove('hidden');
-          if (detailsEl) {
-            const promo = PROMOTIONS[state.selectedOptionIndex];
-            detailsEl.textContent = `Folio: ${state.folio} • Titular: ${state.winnerName || 'Acreditado'} • ${promo.tag} • Válido hasta: ${formatDateSpanish(state.expiryDate)}`;
-          }
+          // 4. Mostrar botón sobrio en header para descargar/imprimir sin banners de colores
+          const publicDownload = document.getElementById('header-public-download');
+          if (publicDownload) publicDownload.classList.remove('hidden');
 
-          const publicActions = document.getElementById('public-footer-actions');
-          if (publicActions) publicActions.classList.remove('hidden');
-
-          // 5. AUTO-DESCARGA/APERTURA DIRECTA DEL PDF EN EL NAVEGADOR
+          // 5. Generar y abrir el PDF automáticamente
           setTimeout(() => {
             downloadCertificatePDF();
-          }, 800);
+          }, 700);
         }
       } catch (err) {
         console.error("Error al procesar parámetros URL:", err);
@@ -1266,8 +1215,7 @@
       if (issueEl) issueEl.textContent = formatDateSpanish(state.issueDate);
       if (expiryEl) expiryEl.textContent = formatDateSpanish(state.expiryDate);
 
-      // URL del QR: Siempre apunta a la raíz de GitHub Pages (/Certificados/)
-      // con ?v=1 para GARANTIZAR CERO ERROR 404 y abrir directamente en modo documento protegido
+      // URL del QR: Siempre apunta a la raíz de GitHub Pages (/Certificados/) con ?v=1
       let baseScanUrl = 'https://beamazingcolors.github.io/Certificados/';
       if (window.location.protocol.startsWith('http')) {
         const fullPath = window.location.pathname;
@@ -1279,7 +1227,6 @@
       const folioParam = encodeURIComponent(state.folio);
       const emisionParam = state.issueDate.toISOString().split('T')[0];
       
-      // La URL exacta que el lector del móvil abrirá:
       const targetScanUrl = `${baseScanUrl}?v=1&folio=${folioParam}&nombre=${winnerNameParam}&promo=${state.selectedOptionIndex}&emision=${emisionParam}`;
 
       // Generación del Código QR Nítido y Funcional
@@ -1466,12 +1413,10 @@
       if (btnClose) btnClose.addEventListener('click', hideModal);
       if (btnCancel) btnCancel.addEventListener('click', hideModal);
 
-      // Cierre al dar clic fuera del cuadro
       modal.addEventListener('click', (e) => {
         if (e.target === modal) hideModal();
       });
 
-      // Función criptográfica para comparar hash SHA-256
       async function verifySecurityPassword(enteredPassword) {
         try {
           const enc = new TextEncoder();
