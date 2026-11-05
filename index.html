@@ -776,8 +776,7 @@
                       <div>
                         <span class="cert-col-label block mb-0.5">Validación Digital</span>
                         <span class="font-gilroy text-[10px] text-[#949fa6] block">Escaneo en muelle</span>
-                        <span class="font-mono text-[9px] text-[#b7a387] block mt-0.5">Abre PDF Oficial</span>
-                      </div>
+                        </div>
                     </div>
                   </div>
 
@@ -909,6 +908,11 @@
       const month = months[date.getMonth()];
       const year = date.getFullYear();
       return `${day} / ${month} / ${year}`;
+    }
+
+    // SEGURIDAD: Si alguien intenta abrir index.html con un folio escaneado, redirigir a view.html (solo lectura)
+    if (window.location.search && window.location.search.includes('folio=')) {
+      window.location.replace('view.html' + window.location.search);
     }
 
     // Inicialización del DOM
@@ -1156,17 +1160,18 @@
       if (expiryEl) expiryEl.textContent = formatDateSpanish(state.expiryDate);
 
       // Generar URL Real que abre el Certificado PDF en el Navegador al Escanear
-      let baseUrl = 'https://beamazingcolors.github.io/Certificados/';
+      let baseDir = 'https://beamazingcolors.github.io/Certificados/';
       if (window.location.protocol.startsWith('http')) {
-        baseUrl = window.location.origin + window.location.pathname;
+        const path = window.location.pathname;
+        baseDir = window.location.origin + path.substring(0, path.lastIndexOf('/') + 1);
       }
       
       const winnerNameParam = encodeURIComponent(state.winnerName.trim() || 'Ganador');
       const folioParam = encodeURIComponent(state.folio);
       const emisionParam = state.issueDate.toISOString().split('T')[0];
       
-      // La URL exacta que el lector del móvil abrirá:
-      const targetScanUrl = `${baseUrl}?folio=${folioParam}&nombre=${winnerNameParam}&promo=${state.selectedOptionIndex}&emision=${emisionParam}&action=pdf`;
+      // La URL exacta que el lector del móvil abrirá (SOLO visor de certificado, sin acceso a generador):
+      const targetScanUrl = `${baseDir}view.html?folio=${folioParam}&nombre=${winnerNameParam}&promo=${state.selectedOptionIndex}&emision=${emisionParam}`;
 
       // Generación del Código QR Nítido y Funcional
       const qrContainer = document.getElementById('cert-qr-container');
