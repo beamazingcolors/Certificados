@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>Cancun Lighthouse Marina — Portal de Certificación VIP & Sorteo de Ganadores</title>
-  <meta name="description" content="Certificados VIP en formato horizontal con folio único, vigencia de 3 meses y restricciones oficiales. Dirección de Marketing 2026." />
+  <title>Cancun Lighthouse Marina & Give Back — Certificados</title>
+  <meta name="description" content="Generador oficial de certificados de cortesía de Cancun Lighthouse Marina y Give Back." />
 
-  <!-- Tipografías Oficiales de Lujo Editorial -->
+  <!-- Tipografías Oficiales del Manual de Marca -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,1127 +19,733 @@
       theme: {
         extend: {
           colors: {
-            marinaNavy: '#050A14',
-            marinaSlate: '#0D192C',
-            marinaGold: '#C5A869',
-            marinaGoldMuted: '#D1BE9B',
-            marinaGoldLight: '#EAE3D2'
+            brandBlack: '#000000',
+            brandDark: '#080C14',
+            brandCard: '#0B111D',
+            brandNavy: '#0C2340',
+            brandNavyLight: '#2d4174',
+            brandNavySoft: '#54699c',
+            brandBlueMuted: '#7b8cb7',
+            brandBluePale: '#d0d8ed',
+            brandGold: '#b7a387',
+            brandGoldMedium: '#c9b9a2',
+            brandGoldLight: '#dacebc',
+            brandGoldPale: '#ece5d8',
+            brandGrayDark: '#3c4752',
+            brandGrayMedium: '#67737a',
+            brandGrayLight: '#949fa6',
+            brandGrayPale: '#c4ced3'
           },
           fontFamily: {
-            serif: ['Cinzel', 'serif'],
-            cursive: ['Playfair Display', 'Cormorant Garamond', 'serif'],
-            sans: ['Outfit', 'Montserrat', 'sans-serif'],
-            mono: ['Courier New', 'monospace']
+            tradeExtended: ['Trade Gothic LT Std Extended', 'Montserrat', 'sans-serif'],
+            trade: ['Trade Gothic Lt Std', 'Montserrat', 'sans-serif'],
+            gilroy: ['Gilroy', 'Plus Jakarta Sans', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
           }
         }
       }
     };
   </script>
 
-  <!-- CDNs Esenciales para PDF, QR, Confeti e Iconos -->
+  <!-- CDNs Esenciales -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    :root {
-      --navy-deep: #050A14;
-      --navy-dark: #08101E;
-      --navy-medium: #0D192C;
-      --gold-primary: #C5A869;
-      --gold-light: #EAE3D2;
-      --gold-muted: #D1BE9B;
-      --gold-gradient: linear-gradient(135deg, #C5A869 0%, #EAE3D2 40%, #BBA063 75%, #8C734B 100%);
-      --glass-bg: rgba(9, 17, 30, 0.6);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-border-specular: rgba(255, 255, 255, 0.2);
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #000000;
+      color: #FFFFFF;
+      font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Fondo Líquido Sereno (Sin luces deslumbrantes) */
-    .liquid-bg-container {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-      background-color: var(--navy-deep);
-      pointer-events: none;
-    }
-
-    .liquid-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      opacity: 0.28;
-      animation: floatOrb 25s ease-in-out infinite alternate;
-    }
-
-    .liquid-orb-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(16, 42, 77, 0.6) 0%, rgba(8, 22, 44, 0.2) 60%, transparent 75%);
-      top: -120px;
-      left: -100px;
-      animation-duration: 26s;
-    }
-
-    .liquid-orb-2 {
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle, rgba(168, 139, 82, 0.18) 0%, rgba(110, 88, 48, 0.08) 55%, transparent 75%);
-      bottom: -150px;
-      right: -80px;
-      animation-duration: 30s;
-      animation-delay: -6s;
-    }
-
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(30px, 40px) scale(1.04); }
-      100% { transform: translate(-25px, 20px) scale(0.96); }
-    }
-
-    /* Paneles Liquid Glass 2026 */
-    .liquid-glass-card {
-      position: relative;
-      background: var(--glass-bg);
-      backdrop-filter: blur(32px) saturate(160%);
-      -webkit-backdrop-filter: blur(32px) saturate(160%);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 var(--glass-border-specular);
-      border-radius: 1.25rem;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .liquid-glass-gold {
-      border-color: rgba(197, 168, 105, 0.22);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(234, 227, 210, 0.25);
-    }
-
-    /* Inputs de Cristal Líquido */
-    .liquid-input {
+    /* Formularios y Controles Minimalistas 2026 */
+    .app-input {
       width: 100%;
-      background: rgba(6, 12, 22, 0.65);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(197, 168, 105, 0.25);
-      color: #F8F9FA;
-      padding: 0.9rem 1.2rem;
-      border-radius: 0.85rem;
-      font-size: 0.98rem;
-      font-weight: 500;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #FFFFFF;
+      font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.875rem;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .app-input:focus {
       outline: none;
-      transition: all 0.25s ease;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+      border-color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .app-input::placeholder {
+      color: #67737a;
     }
 
-    .liquid-input:focus {
-      border-color: var(--gold-primary);
-      background: rgba(8, 16, 30, 0.85);
-      box-shadow: 0 0 0 3px rgba(197, 168, 105, 0.15);
-    }
-
-    .liquid-input::placeholder {
-      color: rgba(148, 163, 184, 0.5);
-    }
-
-    /* Tarjetas de Opciones */
-    .liquid-option-card {
-      background: rgba(7, 14, 26, 0.5);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 0.85rem;
-      padding: 1rem 1.15rem;
+    /* Tarjetas de Selección de Beneficio */
+    .benefit-option-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.15s ease;
       user-select: none;
     }
-
-    .liquid-option-card:hover {
-      background: rgba(11, 22, 40, 0.65);
-      border-color: rgba(197, 168, 105, 0.3);
-      transform: translateY(-1px);
+    .benefit-option-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .benefit-option-card.active {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #FFFFFF;
     }
 
-    .liquid-option-card.active {
-      background: linear-gradient(135deg, rgba(14, 28, 52, 0.8) 0%, rgba(9, 18, 34, 0.9) 100%);
-      border-color: var(--gold-primary);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(234, 227, 210, 0.3);
-    }
-
-    /* Botón Satin Gold 2026 */
-    .liquid-btn-gold {
-      background: var(--gold-gradient);
-      color: #070E1A;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      padding: 0.95rem 1.8rem;
-      border-radius: 0.85rem;
-      border: none;
-      cursor: pointer;
+    /* Botón Primario: Alto Contraste y Minimalismo (Sin Dorado) */
+    .btn-primary-action {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.65rem;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 8px 22px rgba(197, 168, 105, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    }
-
-    .liquid-btn-gold:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 28px rgba(197, 168, 105, 0.35);
-    }
-
-    .liquid-btn-secondary {
-      background: rgba(12, 22, 38, 0.5);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #CBD5E1;
-      font-weight: 500;
-      padding: 0.75rem 1.25rem;
-      border-radius: 0.75rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.88rem;
-      transition: all 0.2s ease;
-    }
-
-    .liquid-btn-secondary:hover {
-      background: rgba(18, 34, 58, 0.7);
-      border-color: rgba(197, 168, 105, 0.35);
-      color: #FFFFFF;
-    }
-
-    .liquid-btn-roulette {
-      background: rgba(16, 34, 60, 0.55);
-      border: 1px solid rgba(197, 168, 105, 0.3);
-      color: #E2E8F0;
-      font-weight: 600;
-      padding: 0.65rem 1.1rem;
-      border-radius: 0.75rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.82rem;
-      transition: all 0.25s ease;
-    }
-
-    .liquid-btn-roulette:hover {
-      background: rgba(22, 46, 80, 0.75);
-      border-color: var(--gold-primary);
-      color: #FFFFFF;
-    }
-
-    @keyframes rouletteSpin {
-      0% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.1) rotate(180deg); }
-      100% { transform: scale(1) rotate(360deg); }
-    }
-    .spinning-icon { animation: rouletteSpin 0.45s ease-in-out infinite; }
-
-    /* ===================================================================
-       CERTIFICADO VIP HORIZONTAL (A4 LANDSCAPE: 1122px x 793px)
-       =================================================================== */
-    .certificate-preview-container {
+      gap: 0.5rem;
       width: 100%;
+      background: #FFFFFF;
+      color: #0C2340;
+      border: 1px solid #FFFFFF;
+      border-radius: 8px;
+      padding: 0.875rem 1.25rem;
+      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.8125rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-primary-action:hover {
+      background: #E2E8F0;
+      border-color: #E2E8F0;
+    }
+    .btn-primary-action:active {
+      transform: scale(0.99);
+    }
+    .btn-primary-action:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+      background: transparent;
+      color: #949fa6;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-secondary-action:hover {
+      color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* ========================================================
+       EL CERTIFICADO HORIZONTAL (1122px x 793px - A4 LANDSCAPE)
+       Arquitectura Modular Cuadrada y Alineación Milimétrica
+       ======================================================== */
+    .certificate-preview-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 0.5rem 0;
-      overflow: hidden;
+      align-items: flex-start;
     }
 
     .certificate-scaler {
       transform-origin: top center;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .vip-certificate {
+    .cert-canvas {
       position: relative;
       width: 1122px;
       height: 793px;
-      min-width: 1122px;
-      min-height: 793px;
-      max-width: 1122px;
-      max-height: 793px;
-      background: radial-gradient(circle at 50% 42%, #0C1729 0%, #08101E 55%, #050A14 100%);
-      color: #F8F9FA;
-      font-family: 'Cinzel', serif;
+      background-color: #000000;
+      color: #FFFFFF;
       box-sizing: border-box;
-      overflow: hidden;
-      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 30px rgba(197, 168, 105, 0.08);
-      border-radius: 4px;
-    }
-
-    .cert-watermark {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 500px;
-      height: 500px;
-      opacity: 0.035;
-      color: #C5A869;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .cert-guilloche-bg {
-      position: absolute;
-      inset: 0;
-      opacity: 0.03;
-      background-image: radial-gradient(#C5A869 0.75px, transparent 0.75px);
-      background-size: 26px 26px;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .cert-border-outer {
-      position: absolute;
-      inset: 22px;
-      border: 1.5px solid rgba(197, 168, 105, 0.55);
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .cert-border-inner {
-      position: absolute;
-      inset: 29px;
-      border: 1px solid rgba(197, 168, 105, 0.25);
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .cert-corner {
-      position: absolute;
-      width: 48px;
-      height: 48px;
-      z-index: 3;
-      color: rgba(197, 168, 105, 0.65);
-      pointer-events: none;
-    }
-    .cert-corner-tl { top: 18px; left: 18px; }
-    .cert-corner-tr { top: 18px; right: 18px; transform: scaleX(-1); }
-    .cert-corner-bl { bottom: 18px; left: 18px; transform: scaleY(-1); }
-    .cert-corner-br { bottom: 18px; right: 18px; transform: scale(-1); }
-
-    .cert-content {
-      position: relative;
-      z-index: 4;
-      height: 100%;
-      padding: 38px 52px 30px 52px;
+      padding: 38px 46px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-sizing: border-box;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95);
     }
 
-    /* Membrete con Logotipo Oficial Adaptado */
+    /* Marcos y Enmarcado Cuadrado */
+    .cert-frame-outer {
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      pointer-events: none;
+    }
+    .cert-frame-inner {
+      position: absolute;
+      inset: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* 1. Header con Ambos Logotipos en Fondo Transparente */
     .cert-header {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .cert-logo-wrap {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 4px;
+      gap: 2.25rem;
+      padding-top: 6px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    .cert-logo-img {
+    .cert-logo-marina {
       height: 52px;
-      max-width: 420px;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+    }
+    .cert-logo-separator {
+      width: 1px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .cert-logo-giveback {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
     }
 
-    .cert-header-meta {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 8px;
-      font-weight: 600;
-      letter-spacing: 0.32em;
-      color: rgba(234, 227, 210, 0.7);
-      text-transform: uppercase;
-      margin-top: 3px;
-    }
-
-    .cert-header-divider {
-      width: 320px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(197, 168, 105, 0.5), transparent);
-      margin: 6px auto 0 auto;
-    }
-
-    .cert-title-block {
+    /* 2. Bloque de Títulos y Recipiente */
+    .cert-titles-block {
       text-align: center;
-      margin-top: 6px;
+      margin-top: 10px;
     }
-
-    .cert-pre-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.35em;
-      color: var(--gold-primary);
+    .cert-overline {
+      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
+      font-size: 0.6875rem; /* 11px */
+      font-weight: 700;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      color: #b7a387;
+      margin-bottom: 4px;
     }
-
-    .cert-main-title {
-      font-family: 'Cinzel', serif;
-      font-size: 29px;
+    .cert-title-primary {
+      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
+      font-size: 1.5rem; /* 24px */
       font-weight: 800;
-      letter-spacing: 0.16em;
-      line-height: 1.15;
-      margin: 2px 0;
-      background: linear-gradient(135deg, #F5EFE6 0%, #C5A869 50%, #D8C39E 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .cert-awarded-label {
+      font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8125rem; /* 13px */
+      color: #949fa6;
+      letter-spacing: 0.04em;
     }
 
-    .cert-awarded-text {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 10.5px;
-      font-weight: 400;
-      color: rgba(248, 249, 250, 0.8);
-      letter-spacing: 0.1em;
-      margin-top: 3px;
-    }
-
+    /* 3. Nombre del Ganador */
     .cert-recipient-block {
       text-align: center;
-      margin: 4px 0;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+    .cert-recipient-name {
+      font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
+      font-size: 2rem; /* 32px */
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      padding-bottom: 6px;
+      display: inline-block;
+      min-width: 480px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     }
 
-    .cert-recipient-name {
-      font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 37px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      color: #F8F5EE;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-      line-height: 1.1;
-      padding: 0 20px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 960px;
+    /* 4. Caja de Beneficio / Cupón (Cuadrada y Precisa) */
+    .cert-benefit-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 14px 24px;
+      text-align: center;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 980px;
+    }
+    .cert-benefit-title {
+      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
+      font-size: 1.125rem; /* 18px */
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      text-transform: uppercase;
+    }
+    .cert-benefit-subtitle {
+      font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8125rem; /* 13px */
+      color: #c4ced3;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    /* 5. Grid de Seguridad Cuadrado y Alineado (3 Columnas Iguales) */
+    .cert-grid-security {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 980px;
       margin: 0 auto;
     }
-
-    .cert-name-underline {
+    .cert-security-col {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 12px 16px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      gap: 12px;
-      margin: 4px auto 0 auto;
-      width: 480px;
+      height: 94px;
+      box-sizing: border-box;
     }
-
-    .cert-name-line {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(197, 168, 105, 0.6));
-    }
-    .cert-name-line-r {
-      background: linear-gradient(90deg, rgba(197, 168, 105, 0.6), transparent);
-    }
-
-    .cert-name-diamond {
-      color: var(--gold-primary);
-      font-size: 7px;
-    }
-
-    .cert-recipient-meta {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 8px;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      color: rgba(197, 168, 105, 0.85);
+    .cert-col-label {
+      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
+      font-size: 0.625rem; /* 10px */
+      font-weight: 700;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
+      color: #b7a387;
+      margin-bottom: 4px;
+    }
+    .cert-folio-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9375rem; /* 15px */
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #FFFFFF;
+    }
+    .cert-col-subtext {
+      font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.6875rem; /* 11px */
+      color: #949fa6;
       margin-top: 3px;
     }
 
-    /* Caja de Cupón */
-    .cert-benefit-box {
-      background: rgba(5, 11, 20, 0.7);
-      border: 1px solid rgba(197, 168, 105, 0.45);
-      border-radius: 6px;
-      padding: 10px 24px;
-      text-align: center;
-      margin: 3px auto;
-      width: 86%;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(234, 227, 210, 0.15);
-      position: relative;
-    }
-
-    .cert-benefit-badge {
-      position: absolute;
-      top: -9px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #112038;
-      color: #D8C39E;
-      border: 1px solid rgba(197, 168, 105, 0.5);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 7.5px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      padding: 1px 12px;
-      border-radius: 10px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .cert-benefit-title {
-      font-family: 'Cinzel', serif;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      color: #FFFFFF;
-      margin-top: 2px;
-      line-height: 1.2;
-    }
-
-    .cert-benefit-highlight {
-      color: #D8C39E;
-    }
-
-    .cert-benefit-subtitle {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 9px;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      color: rgba(203, 213, 225, 0.8);
-      margin-top: 2px;
-    }
-
-    /* Metadatos */
-    .cert-meta-row {
+    /* Tarjeta QR Cuadrada y Nítida */
+    .cert-qr-wrap {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-top: 5px;
-      padding: 0 16px;
+      gap: 14px;
     }
-
-    .cert-meta-col-left { text-align: left; min-width: 190px; }
-    .cert-meta-label {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 7.5px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: var(--gold-primary);
-      text-transform: uppercase;
-    }
-
-    .cert-folio-code {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      color: #F8F5EE;
-      margin-top: 2px;
-    }
-
-    .cert-folio-badge {
-      display: inline-block;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 7px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: #A7F3D0;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      padding: 1px 6px;
-      border-radius: 3px;
-      margin-top: 2px;
-      text-transform: uppercase;
-    }
-
-    .cert-seal-wrap { display: flex; justify-content: center; align-items: center; }
-    .cert-gold-seal {
-      width: 76px;
-      height: 76px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #EAE3D2 0%, #C5A869 40%, #8C734B 80%, #5E4B2B 100%);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 0 -2px 3px rgba(0, 0, 0, 0.5);
-      border: 1.5px solid #F3EDE2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3px;
-      color: #2D220B;
-      text-align: center;
-    }
-
-    .cert-seal-inner {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 1px dashed rgba(45, 34, 11, 0.45);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .cert-seal-text-top {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 5px;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    .cert-seal-stars { font-size: 7px; letter-spacing: 1px; color: #2D220B; margin: 1px 0; }
-    .cert-seal-text-center {
-      font-family: 'Cinzel', serif;
-      font-size: 7px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-
-    .cert-meta-col-right { text-align: right; min-width: 190px; }
-    .cert-date-val {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 10.5px;
-      font-weight: 600;
-      color: #F8F5EE;
-      letter-spacing: 0.03em;
-      margin-top: 2px;
-    }
-    .cert-expiry-notice {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 7.5px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      color: var(--gold-primary);
-      margin-top: 2px;
-    }
-
-    .cert-signature-row {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-top: 5px;
-      padding: 0 16px;
-    }
-
-    .cert-qr-block { display: flex; align-items: center; gap: 10px; }
-    .cert-qr-frame {
+    .cert-qr-box {
+      width: 68px;
+      height: 68px;
       background: #FFFFFF;
-      padding: 3px;
+      padding: 4px;
       border-radius: 4px;
-      width: 52px;
-      height: 52px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.4);
     }
-    .cert-qr-frame img, .cert-qr-frame canvas { width: 46px !important; height: 46px !important; }
-    .cert-qr-info { text-align: left; }
-    .cert-qr-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 7.5px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--gold-primary);
-      text-transform: uppercase;
-    }
-    .cert-qr-desc {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 6.8px;
-      color: rgba(248, 249, 250, 0.65);
-      letter-spacing: 0.04em;
-      margin-top: 1px;
+    .cert-qr-box canvas, .cert-qr-box img {
+      width: 60px !important;
+      height: 60px !important;
+      display: block;
     }
 
-    .cert-sig-block { text-align: center; min-width: 210px; }
-    .cert-sig-svg { width: 135px; height: 34px; margin: 0 auto -3px auto; display: block; }
-    .cert-sig-line { width: 170px; height: 1px; background: rgba(197, 168, 105, 0.45); margin: 0 auto 3px auto; }
-    .cert-sig-name { font-family: 'Cinzel', serif; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; color: #F8F5EE; }
-    .cert-sig-role { font-family: 'Montserrat', sans-serif; font-size: 6.8px; font-weight: 500; letter-spacing: 0.15em; color: rgba(197, 168, 105, 0.8); text-transform: uppercase; }
-
-    /* Pie de Página y Restricciones Estrictas */
-    .cert-footer-disclaimer {
-      margin-top: 5px;
+    /* 6. Pie de Página y Restricciones */
+    .cert-footer-block {
       text-align: center;
-      border-top: 1px solid rgba(197, 168, 105, 0.2);
-      padding-top: 4px;
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .cert-restrictions-bold {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 8px;
+    .cert-restrictions-title {
+      font-family: 'Trade Gothic LT Std Extended', 'Montserrat', sans-serif;
+      font-size: 0.6875rem; /* 11px */
       font-weight: 700;
-      color: var(--gold-primary);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      margin-bottom: 2px;
+      color: #ece5d8;
+      margin-bottom: 3px;
     }
     .cert-legal-text {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 6.5px;
-      line-height: 1.35;
-      color: rgba(203, 213, 225, 0.65);
-      letter-spacing: 0.03em;
-      max-width: 960px;
+      font-family: 'Gilroy', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.5625rem; /* 9px */
+      color: #67737a;
+      line-height: 1.45;
+      max-width: 920px;
       margin: 0 auto;
     }
 
-    @page { size: landscape; margin: 0; }
+    /* Impresión */
     @media print {
-      body { background: #000000 !important; margin: 0 !important; padding: 0 !important; }
-      .no-print, .liquid-bg-container, nav, aside, header, .liquid-glass-card, footer, #history-section { display: none !important; }
-      .certificate-preview-container { padding: 0 !important; margin: 0 !important; width: 100vw !important; height: 100vh !important; }
-      .certificate-scaler { transform: none !important; }
-      .vip-certificate { box-shadow: none !important; border-radius: 0 !important; width: 100vw !important; height: 100vh !important; }
+      body {
+        background: #000000 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      header, aside, .control-panel, #history-section {
+        display: none !important;
+      }
+      .certificate-preview-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      .certificate-scaler {
+        transform: none !important;
+      }
+      .cert-canvas {
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
-<body class="bg-[#050A14] text-slate-100 min-h-screen font-sans selection:bg-[#C5A869]/25 selection:text-[#EAE3D2] overflow-x-hidden">
+<body class="bg-black text-white antialiased selection:bg-white selection:text-black">
 
-  <!-- Fondo Líquido Muted 2026 -->
-  <div class="liquid-bg-container" aria-hidden="true">
-    <div class="liquid-orb liquid-orb-1"></div>
-    <div class="liquid-orb liquid-orb-2"></div>
-  </div>
-
-  <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
-    <symbol id="corner-ornament" viewBox="0 0 100 100">
-      <path d="M 4 4 L 96 4 L 96 12 L 12 12 L 12 96 L 4 96 Z" fill="currentColor" />
-      <path d="M 20 20 L 75 20 L 75 26 L 26 26 L 26 75 L 20 75 Z" fill="currentColor" opacity="0.8" />
-      <circle cx="8" cy="8" r="3" fill="currentColor" />
-    </symbol>
-    <symbol id="nautical-compass" viewBox="0 0 200 200">
-      <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="1.5" />
-      <circle cx="100" cy="100" r="82" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" />
-      <polygon points="100,10 108,85 100,75 92,85" fill="currentColor" />
-      <polygon points="100,190 108,115 100,125 92,115" fill="currentColor" />
-      <polygon points="10,100 85,92 75,100 85,108" fill="currentColor" />
-      <polygon points="190,100 115,92 125,100 115,108" fill="currentColor" />
-      <circle cx="100" cy="100" r="5" fill="currentColor" />
-    </symbol>
-  </svg>
-
-  <!-- Barra Superior con Logotipo Oficial en Cápsula de Cristal -->
-  <header class="relative z-20 border-b border-white/5 bg-[#08101E]/70 backdrop-blur-xl px-4 lg:px-8 py-3">
+  <!-- ==========================================
+       BARRA SUPERIOR (HEADER MINIMALISTA 2026)
+       ========================================== -->
+  <header class="border-b border-white/10 bg-black/90 sticky top-0 z-40 px-4 lg:px-8 py-3.5 backdrop-blur-md">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-3.5">
-        <div class="h-10 px-3 py-1 rounded-xl bg-white/95 border border-amber-200/40 flex items-center justify-center shadow-md">
-          <img id="navbar-logo-img" src="assets/logo.png" alt="Cancun Lighthouse Marina" class="h-7 w-auto object-contain" />
-        </div>
-        <div>
-          <span class="text-[10px] tracking-[0.22em] font-semibold text-amber-200/80 uppercase block">Cancun Lighthouse Marina</span>
-          <h1 class="text-sm font-serif font-bold text-white tracking-wide flex items-center gap-2">
-            Portal de Certificación VIP
-            <span class="text-[9px] font-sans tracking-wider font-semibold py-0.5 px-2 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
-              2026 Edition
-            </span>
-          </h1>
-        </div>
+      
+      <!-- Logotipos en Fondo Transparente -->
+      <div class="flex items-center gap-4">
+        <img id="nav-logo-marina" src="assets/logo-marina-white.png" alt="Cancun Lighthouse Marina" class="h-7 w-auto object-contain" />
+        <div class="w-[1px] h-5 bg-white/20"></div>
+        <img id="nav-logo-giveback" src="assets/logo-giveback.png" alt="Give Back" class="h-5 w-auto object-contain" />
       </div>
-      <div class="flex items-center space-x-2.5">
-        <a href="#history-section" class="liquid-btn-secondary text-xs py-2 px-3 hidden sm:inline-flex items-center gap-1.5">
-          <i data-lucide="archive" class="w-3.5 h-3.5 text-amber-300"></i>
+
+      <!-- Título Central / Estado -->
+      <div class="hidden sm:block text-center">
+        <span class="font-tradeExtended font-bold text-xs uppercase tracking-[0.2em] text-white">
+          Generador de Certificados
+        </span>
+      </div>
+
+      <!-- Acciones Rápidas -->
+      <div class="flex items-center gap-2">
+        <button type="button" id="btn-reset-form" class="btn-secondary-action">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span>Limpiar</span>
+        </button>
+        <a href="#history-section" class="btn-secondary-action hidden md:inline-flex">
+          <i data-lucide="archive" class="w-3.5 h-3.5"></i>
           <span>Historial</span>
         </a>
-        <button onclick="window.print()" class="liquid-btn-secondary text-xs py-2 px-3 inline-flex items-center gap-1.5">
-          <i data-lucide="printer" class="w-3.5 h-3.5 text-slate-300"></i>
-          <span>Imprimir</span>
-        </button>
       </div>
+
     </div>
   </header>
 
-  <!-- Contenedor Principal -->
-  <main class="relative z-10 max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-8">
-    
-    <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+  <!-- ==========================================
+       CONTENIDO PRINCIPAL
+       ========================================== -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- CONTROLES LIQUID GLASS -->
-      <section class="xl:col-span-5 space-y-5">
+      <!-- ==========================================
+           COLUMNA IZQUIERDA: PANEL DE CONTROL
+           ========================================== -->
+      <aside class="lg:col-span-5 control-panel space-y-4">
         
-        <div class="liquid-glass-card liquid-glass-gold p-6">
+        <div class="bg-[#080C14] border border-white/10 rounded-xl p-6 space-y-5">
           
-          <div class="flex items-center justify-between border-b border-white/5 pb-3.5 mb-4">
-            <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-amber-300"></span>
-              <h3 class="text-sm font-semibold text-white tracking-wide">Datos del Ganador</h3>
-            </div>
-            <span class="text-[10px] tracking-wider font-mono text-amber-200/70 uppercase">Registro Nominativo</span>
+          <div class="border-b border-white/10 pb-3">
+            <h2 class="font-tradeExtended font-bold text-sm tracking-wider uppercase text-white">
+              Datos del Certificado
+            </h2>
+            <p class="font-gilroy text-xs text-[#949fa6] mt-0.5">
+              Ingresa los datos para actualizar la vista previa y generar el documento.
+            </p>
           </div>
 
-          <form id="winner-form" class="space-y-4" onsubmit="return false;">
+          <form id="certificate-form" onsubmit="return false;" class="space-y-4">
             
-            <!-- 1. NOMBRE COMPLETO -->
+            <!-- 1. NOMBRE COMPLETO DEL GANADOR -->
             <div>
-              <label for="input-winner-name" class="block text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-200/90 mb-1.5">
+              <label for="input-winner-name" class="block font-tradeExtended font-bold text-[11px] uppercase tracking-[0.14em] text-[#b7a387] mb-1.5">
                 Nombre Completo del Ganador *
               </label>
-              <div class="relative">
-                <input 
-                  type="text" 
-                  id="input-winner-name" 
-                  placeholder="Ej. Lic. Valeria Morales Domínguez" 
-                  class="liquid-input pr-10"
-                  required
-                  autocomplete="off"
-                />
-                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-amber-200/50">
-                  <i data-lucide="user-check" class="w-4 h-4"></i>
-                </div>
-              </div>
-              <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
-                <i data-lucide="shield-check" class="w-3 h-3 text-emerald-400 shrink-0"></i>
-                <span>Nominativo e intransferible. Válido para un solo uso.</span>
-              </p>
+              <input 
+                type="text" 
+                id="input-winner-name" 
+                placeholder="Ej. Valeria Morales Domínguez" 
+                class="app-input"
+                required
+                autocomplete="off"
+              />
             </div>
 
-            <!-- 2. SELECCIÓN DE CUPÓN -->
+            <!-- 2. SELECCIÓN DE BENEFICIO (3 OPCIONES OFICIALES) -->
             <div>
-              <div class="flex items-center justify-between mb-2">
-                <label class="block text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-200/90">
-                  Cupón Asignado *
-                </label>
-                <button 
-                  type="button" 
-                  id="btn-spin-roulette"
-                  class="liquid-btn-roulette"
-                  title="Elige un ganador al azar entre las 3 opciones de forma dinámica"
-                >
-                  <i data-lucide="dices" class="w-3.5 h-3.5 roulette-icon text-amber-200"></i>
-                  <span>Sortear al Azar</span>
-                </button>
-              </div>
+              <label class="block font-tradeExtended font-bold text-[11px] uppercase tracking-[0.14em] text-[#b7a387] mb-2">
+                Beneficio Asignado *
+              </label>
 
-              <!-- 3 Tarjetas de Promoción Oficiales -->
-              <div class="space-y-2" id="options-group">
+              <div class="space-y-2.5" id="options-container">
                 
-                <div class="liquid-option-card active" data-promo-index="0">
-                  <div class="flex items-start gap-3">
-                    <div class="p-2 rounded-lg bg-sky-500/10 text-sky-300 mt-0.5 border border-sky-400/20 shrink-0">
-                      <i data-lucide="sailboat" class="w-4 h-4"></i>
+                <!-- Opción 1 -->
+                <div class="benefit-option-card active" data-promo-index="0">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="font-tradeExtended font-bold text-xs text-white uppercase tracking-wide">
+                      2x1 en Catamarán a Isla Mujeres.
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="flex items-center justify-between gap-1">
-                        <span class="text-[9px] font-bold tracking-wider uppercase text-amber-200/80">Opción 1</span>
-                        <span class="text-[9px] font-mono font-semibold py-0.5 px-1.5 rounded bg-sky-500/15 text-sky-200">2x1</span>
-                      </div>
-                      <h4 class="text-xs font-bold text-white tracking-wide mt-0.5">
-                        2x1 en Catamarán a Isla Mujeres.
-                      </h4>
-                      <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
-                        Navegación premium, barra libre nacional, snorkel en arrecife y club de playa.
-                      </p>
-                    </div>
+                    <span class="font-tradeExtended text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white shrink-0">
+                      2X1
+                    </span>
                   </div>
+                  <p class="font-gilroy text-[11px] text-[#949fa6] mt-1">
+                    Navegación en catamarán, barra libre nacional, snorkel en arrecife y club de playa.
+                  </p>
                 </div>
 
-                <div class="liquid-option-card" data-promo-index="1">
-                  <div class="flex items-start gap-3">
-                    <div class="p-2 rounded-lg bg-teal-500/10 text-teal-300 mt-0.5 border border-teal-400/20 shrink-0">
-                      <i data-lucide="waves" class="w-4 h-4"></i>
+                <!-- Opción 2 -->
+                <div class="benefit-option-card" data-promo-index="1">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="font-tradeExtended font-bold text-xs text-white uppercase tracking-wide">
+                      15% de descuento en renta de Jetski.
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="flex items-center justify-between gap-1">
-                        <span class="text-[9px] font-bold tracking-wider uppercase text-amber-200/80">Opción 2</span>
-                        <span class="text-[9px] font-mono font-semibold py-0.5 px-1.5 rounded bg-teal-500/15 text-teal-200">15% OFF</span>
-                      </div>
-                      <h4 class="text-xs font-bold text-white tracking-wide mt-0.5">
-                        15% de descuento en renta de Jetski.
-                      </h4>
-                      <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
-                        Velocidad en motos acuáticas de última generación en laguna o mar abierto.
-                      </p>
-                    </div>
+                    <span class="font-tradeExtended text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white shrink-0">
+                      15% OFF
+                    </span>
                   </div>
+                  <p class="font-gilroy text-[11px] text-[#949fa6] mt-1">
+                    Motos acuáticas de última generación en laguna o mar abierto.
+                  </p>
                 </div>
 
-                <div class="liquid-option-card" data-promo-index="2">
-                  <div class="flex items-start gap-3">
-                    <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-300 mt-0.5 border border-emerald-400/20 shrink-0">
-                      <i data-lucide="compass" class="w-4 h-4"></i>
+                <!-- Opción 3 -->
+                <div class="benefit-option-card" data-promo-index="2">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="font-tradeExtended font-bold text-xs text-white uppercase tracking-wide">
+                      15% de descuento en actividades de casa
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="flex items-center justify-between gap-1">
-                        <span class="text-[9px] font-bold tracking-wider uppercase text-amber-200/80">Opción 3</span>
-                        <span class="text-[9px] font-mono font-semibold py-0.5 px-1.5 rounded bg-emerald-500/15 text-emerald-200">15% OFF</span>
-                      </div>
-                      <h4 class="text-xs font-bold text-white tracking-wide mt-0.5">
-                        15% de descuento en actividades de casa
-                      </h4>
-                      <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
-                        (Jungle Tour, Isla Mujeres y circuito de ATVs).
-                      </p>
-                    </div>
+                    <span class="font-tradeExtended text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white shrink-0">
+                      15% OFF
+                    </span>
                   </div>
+                  <p class="font-gilroy text-[11px] text-[#949fa6] mt-1">
+                    (Jungle Tour, Isla Mujeres y circuito de ATVs).
+                  </p>
                 </div>
 
               </div>
             </div>
 
-            <!-- 3. VIGENCIA (3 MESES) Y FOLIO ÚNICO -->
+            <!-- 3. FECHAS Y FOLIO ÚNICO -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
               
-              <div class="p-3 rounded-lg bg-white/[0.03] border border-white/5">
-                <span class="text-[9px] font-bold uppercase tracking-[0.14em] text-amber-200/80 flex items-center gap-1">
-                  <i data-lucide="calendar" class="w-3 h-3"></i>
-                  Vigencia de 3 Meses
-                </span>
+              <div>
+                <label for="input-issue-date" class="block font-tradeExtended font-bold text-[10px] uppercase tracking-[0.14em] text-[#b7a387] mb-1">
+                  Fecha de Emisión
+                </label>
                 <input 
                   type="date" 
                   id="input-issue-date" 
-                  class="w-full bg-transparent text-xs text-white mt-1 outline-none font-medium"
+                  class="app-input py-2 text-xs"
                 />
-                <span class="text-[9px] text-emerald-300/90 block mt-0.5 font-medium">
-                  ✓ Válido por 3 meses automáticos
+                <span class="font-gilroy text-[10px] text-[#949fa6] block mt-1">
+                  Válido por 3 meses automáticos
                 </span>
               </div>
 
-              <div class="p-3 rounded-lg bg-white/[0.03] border border-white/5">
-                <div class="flex items-center justify-between">
-                  <span class="text-[9px] font-bold uppercase tracking-[0.14em] text-amber-200/80 flex items-center gap-1">
-                    <i data-lucide="hash" class="w-3 h-3"></i>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label for="input-folio" class="block font-tradeExtended font-bold text-[10px] uppercase tracking-[0.14em] text-[#b7a387]">
                     Folio Único
-                  </span>
-                  <button type="button" id="btn-regen-folio" class="text-[9px] text-amber-200 hover:text-white" title="Regenerar">
-                    <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i>
+                  </label>
+                  <button type="button" id="btn-regen-folio" class="text-[10px] text-[#949fa6] hover:text-white" title="Regenerar Folio">
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i>
                   </button>
                 </div>
                 <input 
                   type="text" 
                   id="input-folio" 
-                  class="w-full bg-transparent font-mono text-xs font-bold text-amber-200 mt-1 outline-none tracking-wider"
+                  class="app-input py-2 font-mono text-xs uppercase tracking-wider" 
                   readonly
                 />
-                <span class="text-[9px] text-slate-400 block mt-0.5">
-                  Solo se podrá usar una vez
+                <span class="font-gilroy text-[10px] text-[#949fa6] block mt-1">
+                  Uso único e irrepetible
                 </span>
               </div>
 
             </div>
 
-            <!-- 4. BOTÓN GENERAR CERTIFICADO (PDF HORIZONTAL) -->
+            <!-- 4. BOTÓN DESCARGAR CERTIFICADO PDF -->
             <div class="pt-2">
               <button 
                 type="button" 
-                id="btn-generate-cert"
-                class="liquid-btn-gold w-full text-center"
+                id="btn-generate-pdf" 
+                class="btn-primary-action"
               >
-                <i data-lucide="file-down" class="w-4 h-4 text-[#070E1A]"></i>
-                <span>Generar Certificado (PDF)</span>
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Descargar Certificado PDF</span>
               </button>
-              <div class="flex items-center justify-between mt-2 px-1">
-                <span class="text-[10px] text-slate-400 flex items-center gap-1">
-                  <i data-lucide="sparkles" class="w-3 h-3 text-amber-200"></i>
-                  Formato horizontal A4
-                </span>
-                <span class="text-[10px] text-amber-200/70 font-medium">
-                  *Aplica restricciones
-                </span>
-              </div>
             </div>
 
-            <div class="flex items-center justify-between pt-1 border-t border-white/5 text-[11px] text-slate-400">
-              <span>No aplica con otras promociones</span>
-              <button type="button" id="btn-share-cert" class="text-amber-200 hover:text-white flex items-center gap-1">
-                <i data-lucide="share-2" class="w-3 h-3"></i>
-                <span>Compartir</span>
-              </button>
+            <div class="text-center pt-2 border-t border-white/10">
+              <span class="font-tradeExtended font-bold text-[10px] tracking-wider uppercase text-[#b7a387]">
+                *Aplica restricciones • No aplica con otras promociones
+              </span>
             </div>
 
           </form>
 
         </div>
 
-      </section>
+      </aside>
 
-      <!-- VISTA PREVIA EN VIVO DEL CERTIFICADO HORIZONTAL -->
-      <section class="xl:col-span-7 space-y-3">
+      <!-- ==========================================
+           COLUMNA DERECHA: VISTA PREVIA DEL CERTIFICADO
+           ========================================== -->
+      <section class="lg:col-span-7 space-y-3">
         
         <div class="flex items-center justify-between px-1">
-          <div class="flex items-center gap-2">
-            <span class="p-1 rounded bg-amber-400/10 text-amber-300">
-              <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-            </span>
-            <span class="text-[11px] font-semibold tracking-wider uppercase text-slate-300">
-              Vista Previa en Vivo (Horizontal A4)
-            </span>
-          </div>
-          <span class="text-[10px] font-mono text-amber-200/60">
-            1122 × 793 px • 300 DPI Ready
+          <h3 class="font-tradeExtended font-bold text-xs uppercase tracking-[0.16em] text-white">
+            Vista Previa
+          </h3>
+          <span class="font-mono text-xs text-[#949fa6]">
+            Documento Oficial
           </span>
         </div>
 
-        <div class="liquid-glass-card p-3 sm:p-4 overflow-hidden flex flex-col items-center justify-start min-h-[500px]">
+        <div class="bg-[#080C14] border border-white/10 rounded-xl p-4 overflow-hidden flex flex-col items-center">
           
-          <div id="cert-preview-container" class="certificate-preview-container w-full">
+          <div id="cert-preview-container" class="certificate-preview-container">
             
             <div id="cert-scaler" class="certificate-scaler">
               
-              <!-- EL CERTIFICADO OFICIAL HORIZONTAL (2026 QUIET LUXURY) -->
-              <div id="vip-certificate-canvas" class="vip-certificate">
+              <!-- EL CANVAS DEL CERTIFICADO (1122px x 793px) -->
+              <div id="cert-canvas-el" class="cert-canvas">
                 
-                <svg class="cert-watermark" aria-hidden="true"><use href="#nautical-compass"></use></svg>
-                <div class="cert-guilloche-bg" aria-hidden="true"></div>
+                <!-- Marcos Cuadrados -->
+                <div class="cert-frame-outer" aria-hidden="true"></div>
+                <div class="cert-frame-inner" aria-hidden="true"></div>
 
-                <div class="cert-border-outer" aria-hidden="true"></div>
-                <div class="cert-border-inner" aria-hidden="true"></div>
+                <!-- 1. MEMBRETE / HEADER CON LOGOS TRANSPARENTES -->
+                <div class="cert-header">
+                  <img 
+                    id="cert-logo-marina" 
+                    src="assets/logo-marina-white.png" 
+                    alt="Cancun Lighthouse Marina" 
+                    class="cert-logo-marina"
+                  />
+                  <div class="cert-logo-separator" aria-hidden="true"></div>
+                  <img 
+                    id="cert-logo-giveback" 
+                    src="assets/logo-giveback.png" 
+                    alt="Give Back" 
+                    class="cert-logo-giveback"
+                  />
+                </div>
 
-                <svg class="cert-corner cert-corner-tl" aria-hidden="true"><use href="#corner-ornament"></use></svg>
-                <svg class="cert-corner cert-corner-tr" aria-hidden="true"><use href="#corner-ornament"></use></svg>
-                <svg class="cert-corner cert-corner-bl" aria-hidden="true"><use href="#corner-ornament"></use></svg>
-                <svg class="cert-corner cert-corner-br" aria-hidden="true"><use href="#corner-ornament"></use></svg>
+                <!-- 2. TITULARES -->
+                <div class="cert-titles-block">
+                  <div class="cert-overline">
+                    Certificado Oficial de Beneficio
+                  </div>
+                  <h1 class="cert-title-primary">
+                    Certificado de Premio
+                  </h1>
+                  <div class="cert-awarded-label">
+                    Otorgado con distinción a:
+                  </div>
+                </div>
 
-                <div class="cert-content">
+                <!-- 3. NOMBRE DEL GANADOR -->
+                <div class="cert-recipient-block">
+                  <div id="cert-winner-name" class="cert-recipient-name">
+                    Nombre del Ganador
+                  </div>
+                </div>
+
+                <!-- 4. BENEFICIO / CUPÓN CUADRADO -->
+                <div class="cert-benefit-box">
+                  <div id="cert-benefit-title" class="cert-benefit-title">
+                    2X1 EN CATAMARÁN A ISLA MUJERES.
+                  </div>
+                  <div id="cert-benefit-subtitle" class="cert-benefit-subtitle">
+                    Navegación en catamarán, barra libre nacional, snorkel en arrecife y club de playa.
+                  </div>
+                </div>
+
+                <!-- 5. GRID DE SEGURIDAD CUADRADO (3 COLUMNAS SIMÉTRICAS) -->
+                <div class="cert-grid-security">
                   
-                  <!-- 1. MEMBRETE OFICIAL CON EL LOGOTIPO OFICIAL -->
-                  <div class="cert-header">
-                    <div class="cert-logo-wrap">
-                      <img 
-                        id="cert-logo-img" 
-                        src="assets/logo.png" 
-                        alt="Cancun Lighthouse Marina" 
-                        class="cert-logo-img"
-                      />
-                    </div>
-                    <div class="cert-header-meta">
-                      Marina Oficial & Club de Yates • Plaza La Isla 1 • Zona Hotelera, Cancún
-                    </div>
-                    <div class="cert-header-divider"></div>
+                  <!-- Columna 1: Folio Oficial -->
+                  <div class="cert-security-col">
+                    <span class="cert-col-label">Folio Oficial</span>
+                    <span id="cert-folio-code" class="cert-folio-code">CLM-2026-X79K2</span>
+                    <span class="cert-col-subtext">Válido para un solo uso</span>
                   </div>
 
-                  <!-- 2. TITULOS Y PRESENTACIÓN -->
-                  <div class="cert-title-block">
-                    <div class="cert-pre-title">
-                      <span>◆</span>
-                      <span>Cortesía de Prestigio & Beneficio Privilegiado</span>
-                      <span>◆</span>
+                  <!-- Columna 2: Periodo de Validez -->
+                  <div class="cert-security-col">
+                    <span class="cert-col-label">Periodo de Validez</span>
+                    <div class="font-gilroy text-xs font-semibold text-white">
+                      Emisión: <span id="cert-issue-date" class="font-normal text-[#c4ced3]">--</span>
                     </div>
-                    <h2 class="cert-main-title">
-                      CERTIFICADO DE PREMIO EXCLUSIVO
-                    </h2>
-                    <p class="cert-awarded-text">
-                      Por medio del presente documento oficial, Cancun Lighthouse Marina se complace en otorgar a:
-                    </p>
+                    <div class="font-gilroy text-xs font-semibold text-white">
+                      Vence: <span id="cert-expiry-date" class="font-normal text-[#ece5d8]">--</span>
+                    </div>
+                    <span class="cert-col-subtext">Vigencia estricta de 3 meses</span>
                   </div>
 
-                  <!-- 3. NOMBRE DEL GANADOR -->
-                  <div class="cert-recipient-block">
-                    <div id="cert-winner-name" class="cert-recipient-name">
-                      Nombre del Ganador
-                    </div>
-                    <div class="cert-name-underline">
-                      <div class="cert-name-line"></div>
-                      <span class="cert-name-diamond">◆</span>
-                      <div class="cert-name-line cert-name-line-r"></div>
-                    </div>
-                    <div class="cert-recipient-meta">
-                      Titular Acreditado • Beneficio Exclusivo e Intransferible
-                    </div>
-                  </div>
-
-                  <!-- 4. CONTENEDOR DE BENEFICIO / CUPÓN -->
-                  <div class="cert-benefit-box">
-                    <div id="cert-benefit-badge" class="cert-benefit-badge">
-                      ★ EXPERIENCIA PREMIUM ★
-                    </div>
-                    <div id="cert-benefit-title" class="cert-benefit-title">
-                      <span class="cert-benefit-highlight">2X1</span> EN CATAMARÁN A ISLA MUJERES
-                    </div>
-                    <div id="cert-benefit-subtitle" class="cert-benefit-subtitle">
-                      Navegación premium, barra libre nacional, snorkel en arrecife y club de playa.
-                    </div>
-                  </div>
-
-                  <!-- 5. FILA DE SEGURIDAD: FOLIO, SELLO Y FECHAS -->
-                  <div class="cert-meta-row">
-                    
-                    <div class="cert-meta-col-left">
-                      <div class="cert-meta-label">Folio Único Oficial</div>
-                      <div id="cert-folio-code" class="cert-folio-code">CLM-2026-X79K2</div>
-                      <div class="cert-folio-badge">VÁLIDO PARA UN SOLO USO</div>
-                    </div>
-
-                    <div class="cert-seal-wrap">
-                      <div class="cert-gold-seal">
-                        <div class="cert-seal-inner">
-                          <span class="cert-seal-text-top">CANCUN LIGHTHOUSE</span>
-                          <span class="cert-seal-stars">★★★★★</span>
-                          <span class="cert-seal-text-center">SELLO OFICIAL<br>DE BENEFICIO</span>
-                        </div>
+                  <!-- Columna 3: Código de Autenticidad QR -->
+                  <div class="cert-security-col">
+                    <div class="cert-qr-wrap">
+                      <div id="cert-qr-container" class="cert-qr-box"></div>
+                      <div>
+                        <span class="cert-col-label block mb-0.5">Validación Digital</span>
+                        <span class="font-gilroy text-[10px] text-[#949fa6] block">Escaneo en muelle</span>
+                        <span class="font-mono text-[9px] text-[#b7a387] block mt-0.5">Registro Oficial</span>
                       </div>
                     </div>
-
-                    <div class="cert-meta-col-right">
-                      <div class="cert-meta-label">Periodo de Validez Oficial</div>
-                      <div class="cert-date-val">
-                        Emisión: <span id="cert-issue-date">05 / NOV / 2026</span>
-                      </div>
-                      <div class="cert-date-val">
-                        Vence: <span id="cert-expiry-date" class="text-amber-200">05 / FEB / 2027</span>
-                      </div>
-                      <div class="cert-expiry-notice">
-                        Vigencia estricta de 3 meses naturales
-                      </div>
-                    </div>
-
                   </div>
 
-                  <!-- 6. CODIGO QR Y FIRMA AUTORIZADA -->
-                  <div class="cert-signature-row">
-                    
-                    <div class="cert-qr-block">
-                      <div id="cert-qr-container" class="cert-qr-frame"></div>
-                      <div class="cert-qr-info">
-                        <div class="cert-qr-title">Código de Autenticidad</div>
-                        <div class="cert-qr-desc">Escanee en muelle para validar folio único</div>
-                        <div class="cert-qr-desc text-amber-200/70 font-mono">Registro Digital Oficial</div>
-                      </div>
-                    </div>
+                </div>
 
-                    <div class="cert-sig-block">
-                      <svg class="cert-sig-svg" viewBox="0 0 200 60" fill="none" stroke="#C5A869" stroke-width="1.8" stroke-linecap="round">
-                        <path d="M 20 40 Q 45 10 70 35 T 120 20 Q 150 45 180 25" />
-                        <path d="M 35 25 Q 50 50 85 45" />
-                        <path d="M 95 30 Q 115 15 140 38" stroke-width="1.2" />
-                      </svg>
-                      <div class="cert-sig-line"></div>
-                      <div class="cert-sig-name">Dirección General & Experiencias Náuticas</div>
-                      <div class="cert-sig-role">Cancun Lighthouse Marina • Plaza La Isla 1</div>
-                    </div>
-
+                <!-- 6. PIE DE PÁGINA Y RESTRICCIONES OFICIALES -->
+                <div class="cert-footer-block">
+                  <div class="cert-restrictions-title">
+                    *Aplica restricciones &bull; No aplica con otras promociones
                   </div>
-
-                  <!-- 7. PIE DE PÁGINA Y RESTRICCIONES OFICIALES -->
-                  <div class="cert-footer-disclaimer">
-                    <div class="cert-restrictions-bold">
-                      *Aplica restricciones &bull; No aplica con otras promociones
-                    </div>
-                    <div class="cert-legal-text">
-                      Certificado nominativo, personal e intransferible. Válido por un solo uso exclusivo para la persona acreditada en este documento. Requiere previa reservación con 48 horas de anticipación sujeta a disponibilidad de embarcaciones y a las condiciones climáticas dictadas por Capitanía de Puerto Cancún. Indispensable presentar este certificado original y una identificación oficial con fotografía al momento de la llegada al muelle oficial en Plaza La Isla 1, Cancún.
-                    </div>
+                  <div class="cert-legal-text">
+                    Certificado personal e intransferible. Válido exclusivamente por un solo uso para la persona acreditada en este documento. Requiere previa reservación con 48 horas de anticipación sujeta a disponibilidad de embarcaciones y a las condiciones climáticas dictadas por Capitanía de Puerto Cancún. Indispensable presentar este certificado original y una identificación oficial con fotografía al momento de la llegada al muelle oficial en Plaza La Isla 1, Cancún.
                   </div>
-
                 </div>
 
               </div>
@@ -1154,263 +760,141 @@
 
     </div>
 
-    <!-- CONTROL DE HISTORIAL -->
-    <section id="history-section" class="mt-10">
-      <div class="liquid-glass-card p-5 lg:p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-3.5 mb-3">
-          <div class="flex items-center gap-2">
-            <div class="p-1.5 rounded-lg bg-amber-400/10 text-amber-200">
-              <i data-lucide="database" class="w-4 h-4"></i>
-            </div>
-            <div>
-              <h3 class="text-sm font-semibold text-white tracking-wide">
-                Historial y Control de Certificados Emitidos
-              </h3>
-              <p class="text-[11px] text-slate-400">
-                Garantiza que cada folio sea único e intransferible.
-              </p>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs text-slate-300">Registrados:</span>
-            <span id="history-count" class="px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-200 font-mono text-xs font-bold border border-amber-400/25">0</span>
-          </div>
+    <!-- ==========================================
+         SECCIÓN DE HISTORIAL DE CERTIFICADOS
+         ========================================== -->
+    <section id="history-section" class="mt-12 bg-[#080C14] border border-white/10 rounded-xl p-6">
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div>
+          <h3 class="font-tradeExtended font-bold text-sm tracking-wider uppercase text-white">
+            Historial de Folios Emitidos
+          </h3>
+          <p class="font-gilroy text-xs text-[#949fa6] mt-0.5">
+            Registro local de folios generados para control administrativo.
+          </p>
         </div>
+        <span id="history-count" class="font-mono text-xs px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[#b7a387]">
+          0
+        </span>
+      </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-white/5 text-[10px] uppercase tracking-wider text-amber-200/70 font-sans">
-                <th class="py-2 px-3">Folio Único</th>
-                <th class="py-2 px-3">Nombre del Ganador</th>
-                <th class="py-2 px-3">Cupón Asignado</th>
-                <th class="py-2 px-3">Fecha de Vencimiento</th>
-                <th class="py-2 px-3 text-right">Estado</th>
-              </tr>
-            </thead>
-            <tbody id="history-tbody"></tbody>
-          </table>
-        </div>
+      <div class="overflow-x-auto mt-4">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="border-b border-white/10 text-[#949fa6] font-tradeExtended uppercase tracking-wider text-[10px]">
+              <th class="py-2.5 px-3">Folio</th>
+              <th class="py-2.5 px-3">Ganador</th>
+              <th class="py-2.5 px-3">Beneficio</th>
+              <th class="py-2.5 px-3">Vence</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody" class="font-gilroy text-[#c4ced3]">
+            <tr>
+              <td colspan="4" class="py-6 text-center text-xs text-[#67737a]">
+                No hay folios emitidos en este dispositivo.
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
   </main>
 
-  <!-- Pie de Página Institucional -->
-  <footer class="relative z-10 border-t border-white/5 bg-[#040812]/90 backdrop-blur-md py-5 px-4 text-center mt-10">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 font-sans">
-      <div class="flex items-center space-x-2">
-        <span class="text-amber-200 font-serif font-bold">Cancun Lighthouse Marina</span>
-        <span>&bull;</span>
-        <span>Dirección de Marketing 2026</span>
-      </div>
-      <div>
-        <span>Plaza La Isla 1, Blvd. Kukulcán Km 12.5, Zona Hotelera, Cancún, Q.R.</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ===================================================================
-       LÓGICA JAVASCRIPT INTEGRADA (CON ADAPTADOR DE LOGO OFICIAL)
-       =================================================================== -->
+  <!-- ==========================================
+       LÓGICA JAVASCRIPT INTEGRADA
+       ========================================== -->
   <script>
-    const OFFICIAL_PROMOTIONS = [
+    // Logotipos Oficiales con Fondo Transparente en Base64
+    window.MARINA_LOGO_B64 = "data:image/png;base64,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";
+    window.GIVEBACK_LOGO_B64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAHECAYAAACnXFiGAABEhUlEQVR4nO3dB7AsR3U47qccoLAAISFyLETOOaiIJudUIDI24QcYKJOxDSaYUOQgRMaYwuQcRCrA5GgyBQJEkBAgFEo5vHf+b1Bf/y+XG3e75/Tufqfqq7KRdO/pnt25M2d6Tm+LiG0AAADAfEtPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpLTwAAAABoLz0BAAAAoL30BAAAAID20hMAAAAA2ktPAAAAAGgvPQEAAACgvfQEAAAAgPbSEwAAAADaS08AAAAAaC89AQAAAKC99AQAAACA9tITAAAAANpL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AAAA7aUnAAAAALSXngAAAADQXnoCAAAAQHvpCQAAAADtpScAAAAAtJeeAAAAANBeegIAAABAe+kJAAAAAO2lJwAAAAC0l54AAAAA0F56AgAAAEB76QkAAAAA7aUnAAAAALSXngAAAADQXnoCAAAAQHvpCQAAAADtpScAAAAAtJeeAAAAANBeegIAAABAe+kJAAAAAO2lJwAAAAC0l54AAAAA0F56AgAAAEB76QkAAAAA7aUnAAAAALSXngAAAADQXnoCAAAAQHvpCQAAAADtpScAAAAAtJeeAAAAANBeegIAAABAe+kJAAAAAO2lJwAAAAC0l54AAAAA0F56AgAAAEB76QkAAAAA7aUnAAAAALSXngAAAADQXnoCAAAAQHvpCQAAAADtpScAAAAAtJeeAAAAANBeegIAAABAe+kJAAAAAO2lJwAAAAC0l54AAAAA0F56AgAAAEB76QkAAAAA7aUnAAAAALSXngAAAADQXnoCAAAAQHvpCQAAAADtpScAAAAAtJeeAAAAANBeegIAAABAe+kJAAAAAO2lJwAAAAC0l54AAAAA0F56AgAAAEB76QkAAAAA7aUnAAAAALSXngAAAADQXnoCAAAAQHvpCQAAAADtpScAAAAAtPf/AYE42vvZVFREAAAAAElFTkSuQmCC";
+
+    // Opciones Oficiales del Concurso
+    const PROMOTIONS = [
       {
         id: 'catamaran',
-        badge: '★ EXPERIENCIA PREMIUM ★',
-        title: '2X1 EN CATAMARÁN A ISLA MUJERES',
-        desc: 'Navega en catamarán de lujo por las aguas turquesas del Caribe Mexicano con barra libre nacional, snorkel en arrecife y club de playa.'
+        title: '2x1 en Catamarán a Isla Mujeres.',
+        tag: '2X1',
+        certTitle: '2X1 EN CATAMARÁN A ISLA MUJERES.',
+        certDesc: 'Navegación en catamarán, barra libre nacional, snorkel en arrecife y club de playa.'
       },
       {
         id: 'jetski',
-        badge: '★ ADRENALINA NÁUTICA ★',
-        title: '15% DE DESCUENTO EN RENTA DE JETSKI',
-        desc: 'Vive la velocidad y la emoción en motos acuáticas de última generación sobre la Laguna Nichupté o mar abierto en Cancún.'
+        title: '15% de descuento en renta de Jetski.',
+        tag: '15% OFF',
+        certTitle: '15% DE DESCUENTO EN RENTA DE JETSKI.',
+        certDesc: 'Motos acuáticas de última generación en laguna o mar abierto.'
       },
       {
-        id: 'actividades_casa',
-        badge: '★ AVENTURA COMPLETA ★',
-        title: '15% DE DESCUENTO EN ACTIVIDADES DE CASA',
-        desc: '(Jungle Tour, Isla Mujeres y circuito de ATVs). Elige entre conducir tu propia lancha por los manglares, excursión a Isla Mujeres o circuito todo terreno.'
+        id: 'casa',
+        title: '15% de descuento en actividades de casa',
+        tag: '15% OFF',
+        certTitle: '15% DE DESCUENTO EN ACTIVIDADES DE CASA.',
+        certDesc: '(Jungle Tour, Isla Mujeres y circuito de ATVs).'
       }
     ];
 
+    // Estado Reactivo
     const state = {
       winnerName: '',
       selectedOptionIndex: 0,
       issueDate: new Date(),
-      expiryDate: null,
-      folio: ''
+      expiryDate: calculateExpiry(new Date()),
+      folio: generateUniqueFolio()
     };
 
-    function calculate3MonthsValidity(fromDate) {
-      const expiry = new Date(fromDate);
-      expiry.setMonth(expiry.getMonth() + 3);
-      return expiry;
+    function calculateExpiry(date) {
+      const exp = new Date(date);
+      exp.setMonth(exp.getMonth() + 3);
+      return exp;
     }
 
     function generateUniqueFolio() {
-      const year = state.issueDate.getFullYear();
-      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let randStr = '';
+      const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+      let code = '';
       for (let i = 0; i < 5; i++) {
-        randStr += chars.charAt(Math.floor(Math.random() * chars.length));
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      return `CLM-${year}-${randStr}`;
+      return 'CLM-2026-' + code;
     }
 
-    function formatDateSpanish(date, format = 'full') {
-      if (!date) return '';
-      const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    function formatDateSpanish(date) {
+      const months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
       const day = String(date.getDate()).padStart(2, '0');
-      const month = months[date.getMonth()].toUpperCase();
+      const month = months[date.getMonth()];
       const year = date.getFullYear();
       return `${day} / ${month} / ${year}`;
     }
 
-    // Procesamiento Adaptativo del Logotipo Oficial para Fondo Oscuro
-    function setupOfficialLogo() {
-      const certLogo = document.getElementById('cert-logo-img');
-      const navbarLogo = document.getElementById('navbar-logo-img');
-      const defaultSrc = 'assets/logo.png';
-
-      if (navbarLogo) navbarLogo.src = defaultSrc;
-
-      if (certLogo) {
-        const temp = new Image();
-        temp.crossOrigin = 'anonymous';
-        temp.onload = () => {
-          try {
-            const canvas = document.createElement('canvas');
-            canvas.width = temp.naturalWidth || 875;
-            canvas.height = temp.naturalHeight || 247;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(temp, 0, 0);
-
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const d = imgData.data;
-
-            for (let i = 0; i < d.length; i += 4) {
-              const a = d[i + 3];
-              if (a > 20) {
-                const r = d[i];
-                const g = d[i + 1];
-                const b = d[i + 2];
-                // Píxeles oscuros (tipografía 'CANCUN LIGHTHOUSE MARINA' y silueta del yate)
-                if (r < 75 && g < 75 && b < 95) {
-                  // Ajuste a champaña perla 2026 (#F4F1EB)
-                  d[i] = 244;
-                  d[i + 1] = 241;
-                  d[i + 2] = 235;
-                }
-                // Los tonos dorados (arco, faro y reflejo del agua) permanecen intactos
-              }
-            }
-
-            ctx.putImageData(imgData, 0, 0);
-            certLogo.src = canvas.toDataURL('image/png');
-          } catch(e) {
-            certLogo.src = defaultSrc;
-          }
-        };
-        temp.onerror = () => { certLogo.src = defaultSrc; };
-        temp.src = defaultSrc;
-      }
-    }
-
-    // QR Autónomo
-    function generateSecurityQR(containerElement, text, size = 46) {
-      if (!containerElement) return;
-      containerElement.innerHTML = '';
-
-      if (typeof QRCode !== 'undefined') {
-        try {
-          new QRCode(containerElement, {
-            text: text,
-            width: size,
-            height: size,
-            colorDark: "#08101E",
-            colorLight: "#FFFFFF",
-            correctLevel: QRCode.CorrectLevel.M
-          });
-          return;
-        } catch (e) {}
-      }
-
-      const canvas = document.createElement('canvas');
-      canvas.width = size;
-      canvas.height = size;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillRect(0, 0, size, size);
-
-      let hash = 0;
-      for (let i = 0; i < text.length; i++) hash = ((hash << 5) - hash) + text.charCodeAt(i) | 0;
-      const modules = 21;
-      const cellSize = size / modules;
-
-      function drawFinder(startX, startY) {
-        ctx.fillStyle = "#08101E";
-        ctx.fillRect(startX * cellSize, startY * cellSize, 7 * cellSize, 7 * cellSize);
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect((startX + 1) * cellSize, (startY + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-        ctx.fillStyle = "#08101E";
-        ctx.fillRect((startX + 2) * cellSize, (startY + 2) * cellSize, 3 * cellSize, 3 * cellSize);
-      }
-      drawFinder(0, 0);
-      drawFinder(modules - 7, 0);
-      drawFinder(0, modules - 7);
-
-      let seed = Math.abs(hash) || 12345;
-      function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-
-      ctx.fillStyle = "#08101E";
-      for (let r = 0; r < modules; r++) {
-        for (let c = 0; c < modules; c++) {
-          const inTL = (r < 8 && c < 8);
-          const inTR = (r < 8 && c >= modules - 8);
-          const inBL = (r >= modules - 8 && c < 8);
-          if (!inTL && !inTR && !inBL && rnd() > 0.5) {
-            ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
-          }
-        }
-      }
-      containerElement.appendChild(canvas);
-    }
-
+    // Inicialización del DOM
     document.addEventListener('DOMContentLoaded', () => {
-      state.expiryDate = calculate3MonthsValidity(state.issueDate);
-      state.folio = generateUniqueFolio();
+      // 1. Cargar Logotipos Transparentes
+      setupLogos();
 
-      setupOfficialLogo();
-
+      // 2. Vincular Inputs
       const inputName = document.getElementById('input-winner-name');
       const inputDate = document.getElementById('input-issue-date');
       const inputFolio = document.getElementById('input-folio');
       const btnRegenFolio = document.getElementById('btn-regen-folio');
-      const btnGenerate = document.getElementById('btn-generate-cert');
-      const btnSpin = document.getElementById('btn-spin-roulette');
-      const btnShare = document.getElementById('btn-share-cert');
+      const btnReset = document.getElementById('btn-reset-form');
+      const btnGenerate = document.getElementById('btn-generate-pdf');
 
-      if (inputName) {
-        inputName.addEventListener('input', (e) => {
-          state.winnerName = e.target.value;
-          updateLiveCertificate();
-        });
-      }
-
+      // Fecha de hoy por defecto
       if (inputDate) {
         inputDate.value = state.issueDate.toISOString().split('T')[0];
         inputDate.addEventListener('change', (e) => {
           if (e.target.value) {
-            state.issueDate = new Date(e.target.value + 'T12:00:00');
-            state.expiryDate = calculate3MonthsValidity(state.issueDate);
+            state.issueDate = new Date(e.target.value + 'T00:00:00');
+            state.expiryDate = calculateExpiry(state.issueDate);
             updateLiveCertificate();
           }
         });
       }
 
-      if (inputFolio) inputFolio.value = state.folio;
+      if (inputFolio) {
+        inputFolio.value = state.folio;
+      }
+
       if (btnRegenFolio) {
         btnRegenFolio.addEventListener('click', () => {
           state.folio = generateUniqueFolio();
@@ -1419,76 +903,74 @@
         });
       }
 
-      const cards = document.querySelectorAll('.liquid-option-card');
-      cards.forEach((card, index) => {
+      if (inputName) {
+        inputName.addEventListener('input', (e) => {
+          state.winnerName = e.target.value;
+          updateLiveCertificate();
+        });
+      }
+
+      // 3. Selección de Opciones
+      const optionCards = document.querySelectorAll('.benefit-option-card');
+      optionCards.forEach((card) => {
         card.addEventListener('click', () => {
-          cards.forEach(c => c.classList.remove('active'));
+          optionCards.forEach(c => c.classList.remove('active'));
           card.classList.add('active');
-          state.selectedOptionIndex = index;
+          const idx = parseInt(card.getAttribute('data-promo-index'), 10);
+          state.selectedOptionIndex = idx;
           updateLiveCertificate();
         });
       });
 
-      if (btnSpin) {
-        btnSpin.addEventListener('click', () => {
-          btnSpin.disabled = true;
-          const icon = btnSpin.querySelector('.roulette-icon');
-          if (icon) icon.classList.add('spinning-icon');
-
-          let cur = 0;
-          let count = 0;
-          const maxCount = 16 + Math.floor(Math.random() * 5);
-          let speed = 70;
-
-          function spin() {
-            cards.forEach(c => c.classList.remove('active'));
-            cur = (cur + 1) % OFFICIAL_PROMOTIONS.length;
-            cards[cur].classList.add('active');
-            state.selectedOptionIndex = cur;
-            updateLiveCertificate();
-
-            count++;
-            if (count < maxCount) {
-              speed += 12;
-              setTimeout(spin, speed);
-            } else {
-              btnSpin.disabled = false;
-              if (icon) icon.classList.remove('spinning-icon');
-              if (typeof confetti === 'function') {
-                confetti({ particleCount: 40, spread: 50, origin: { y: 0.5 }, colors: ['#C5A869', '#EAE3D2', '#FFFFFF'] });
-              }
-            }
-          }
-          spin();
+      // 4. Limpiar Formulario
+      if (btnReset) {
+        btnReset.addEventListener('click', () => {
+          if (inputName) inputName.value = '';
+          state.winnerName = '';
+          state.folio = generateUniqueFolio();
+          if (inputFolio) inputFolio.value = state.folio;
+          state.issueDate = new Date();
+          state.expiryDate = calculateExpiry(state.issueDate);
+          if (inputDate) inputDate.value = state.issueDate.toISOString().split('T')[0];
+          optionCards.forEach((c, i) => {
+            if (i === 0) c.classList.add('active');
+            else c.classList.remove('active');
+          });
+          state.selectedOptionIndex = 0;
+          updateLiveCertificate();
         });
       }
 
+      // 5. Botón Generar PDF
       if (btnGenerate) {
         btnGenerate.addEventListener('click', downloadCertificatePDF);
       }
 
-      if (btnShare) {
-        btnShare.addEventListener('click', () => {
-          const promo = OFFICIAL_PROMOTIONS[state.selectedOptionIndex];
-          const text = `🌟 Certificado VIP Cancun Lighthouse Marina 🌟\nGanador: ${state.winnerName || 'Ganador'}\nBeneficio: ${promo.title}\nFolio: ${state.folio}\nVigencia de 3 meses: ${formatDateSpanish(state.expiryDate)}\n*Aplica restricciones. No aplica con otras promociones.`;
-          if (navigator.share) {
-            navigator.share({ title: 'Certificado VIP', text: text });
-          } else {
-            navigator.clipboard.writeText(text).then(() => alert("¡Datos copiados al portapapeles!"));
-          }
-        });
-      }
-
+      // 6. Inicializar Escalador y Render Inicial
       initScaler();
       updateLiveCertificate();
       loadHistory();
       if (typeof lucide !== 'undefined') lucide.createIcons();
     });
 
+    function setupLogos() {
+      const navMarina = document.getElementById('nav-logo-marina');
+      const navGiveback = document.getElementById('nav-logo-giveback');
+      const certMarina = document.getElementById('cert-logo-marina');
+      const certGiveback = document.getElementById('cert-logo-giveback');
+
+      const marinaSrc = window.MARINA_LOGO_B64 || 'assets/logo-marina-white.png';
+      const givebackSrc = window.GIVEBACK_LOGO_B64 || 'assets/logo-giveback.png';
+
+      if (navMarina) navMarina.src = marinaSrc;
+      if (navGiveback) navGiveback.src = givebackSrc;
+      if (certMarina) certMarina.src = marinaSrc;
+      if (certGiveback) certGiveback.src = givebackSrc;
+    }
+
     function updateLiveCertificate() {
-      const promo = OFFICIAL_PROMOTIONS[state.selectedOptionIndex];
+      const promo = PROMOTIONS[state.selectedOptionIndex];
       const nameEl = document.getElementById('cert-winner-name');
-      const badgeEl = document.getElementById('cert-benefit-badge');
       const titleEl = document.getElementById('cert-benefit-title');
       const subtitleEl = document.getElementById('cert-benefit-subtitle');
       const folioEl = document.getElementById('cert-folio-code');
@@ -1496,41 +978,53 @@
       const expiryEl = document.getElementById('cert-expiry-date');
 
       if (nameEl) nameEl.textContent = state.winnerName.trim() || 'Nombre del Ganador';
-      if (badgeEl) badgeEl.textContent = promo.badge;
-      if (titleEl) {
-        if (promo.id === 'catamaran') {
-          titleEl.innerHTML = `<span class="cert-benefit-highlight">2X1</span> EN CATAMARÁN A ISLA MUJERES`;
-        } else if (promo.id === 'jetski') {
-          titleEl.innerHTML = `<span class="cert-benefit-highlight">15% DE DESCUENTO</span> EN RENTA DE JETSKI`;
-        } else {
-          titleEl.innerHTML = `<span class="cert-benefit-highlight">15% DE DESCUENTO</span> EN ACTIVIDADES DE CASA`;
-        }
-      }
-      if (subtitleEl) subtitleEl.textContent = promo.desc;
+      if (titleEl) titleEl.textContent = promo.certTitle;
+      if (subtitleEl) subtitleEl.textContent = promo.certDesc;
       if (folioEl) folioEl.textContent = state.folio;
       if (issueEl) issueEl.textContent = formatDateSpanish(state.issueDate);
       if (expiryEl) expiryEl.textContent = formatDateSpanish(state.expiryDate);
 
-      const qr = document.getElementById('cert-qr-container');
-      if (qr) {
-        generateSecurityQR(qr, `CANCUN LIGHTHOUSE MARINA\nFolio: ${state.folio}\nGanador: ${state.winnerName || 'Ganador'}\nBeneficio: ${promo.title}\nVigencia: 3 Meses (${formatDateSpanish(state.expiryDate)})`, 46);
+      // Generar Código QR Nítido y Alineado
+      const qrContainer = document.getElementById('cert-qr-container');
+      if (qrContainer) {
+        qrContainer.innerHTML = '';
+        const qrPayload = `CANCUN LIGHTHOUSE MARINA & GIVE BACK
+Folio: ${state.folio}
+Beneficiario: ${state.winnerName.trim() || 'Titular'}
+Beneficio: ${promo.title}
+Válido hasta: ${formatDateSpanish(state.expiryDate)}
+*Aplica restricciones. No aplica con otras promociones.`;
+        try {
+          new QRCode(qrContainer, {
+            text: qrPayload,
+            width: 60,
+            height: 60,
+            colorDark: '#000000',
+            colorLight: '#FFFFFF',
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
 
     function initScaler() {
       const container = document.getElementById('cert-preview-container');
       const scaler = document.getElementById('cert-scaler');
+
       function scale() {
         if (!container || !scaler) return;
-        const available = container.clientWidth - 20;
+        const available = container.clientWidth;
         let s = available / 1122;
         if (s > 1) s = 1;
-        if (s < 0.28) s = 0.28;
+        if (s < 0.25) s = 0.25;
         scaler.style.transform = `scale(${s})`;
-        container.style.height = `${(793 * s) + 25}px`;
+        container.style.height = `${(793 * s) + 10}px`;
       }
+
       window.addEventListener('resize', scale);
-      setTimeout(scale, 80);
+      setTimeout(scale, 60);
     }
 
     async function downloadCertificatePDF() {
@@ -1543,13 +1037,14 @@
 
       recordWinner();
 
-      const cert = document.getElementById('vip-certificate-canvas');
+      const certCanvas = document.getElementById('cert-canvas-el');
       const scaler = document.getElementById('cert-scaler');
-      const btn = document.getElementById('btn-generate-cert');
+      const btn = document.getElementById('btn-generate-pdf');
       const origHtml = btn.innerHTML;
 
       btn.disabled = true;
-      btn.innerHTML = `Generando PDF en Alta Calidad...`;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Generando PDF...</span>`;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
 
       try {
         if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
@@ -1560,82 +1055,87 @@
         const prevTransform = scaler ? scaler.style.transform : '';
         if (scaler) scaler.style.transform = 'scale(1)';
 
-        const canvas = await html2canvas(cert, {
+        const canvas = await html2canvas(certCanvas, {
           scale: 2.5,
           useCORS: true,
           allowTaint: true,
-          backgroundColor: '#050A14',
+          backgroundColor: '#000000',
           width: 1122,
-          height: 793
+          height: 793,
+          logging: false
         });
 
         if (scaler && prevTransform) scaler.style.transform = prevTransform;
 
         const imgData = canvas.toDataURL('image/png', 1.0);
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
+        const doc = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: 'a4',
+          compress: true
+        });
+
         doc.addImage(imgData, 'PNG', 0, 0, 297, 210, undefined, 'FAST');
+        const cleanName = state.winnerName.trim().replace(/[^a-zA-Z0-9]/g, '_');
+        doc.save(`Certificado_${cleanName}_${state.folio}.pdf`);
 
-        const clean = state.winnerName.replace(/[^a-zA-Z0-9]/g, '_');
-        doc.save(`Certificado_VIP_${clean}_${state.folio}.pdf`);
-
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 }, colors: ['#C5A869', '#EAE3D2', '#FFFFFF'] });
-        }
       } catch (err) {
-        console.error(err);
+        console.error("Error al generar PDF:", err);
         window.print();
       } finally {
         btn.disabled = false;
         btn.innerHTML = origHtml;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
       }
     }
 
     function recordWinner() {
-      const promo = OFFICIAL_PROMOTIONS[state.selectedOptionIndex];
-      const rec = {
+      const promo = PROMOTIONS[state.selectedOptionIndex];
+      const record = {
         folio: state.folio,
         name: state.winnerName.trim(),
         promo: promo.title,
         expiry: formatDateSpanish(state.expiryDate)
       };
+
       try {
-        let list = JSON.parse(localStorage.getItem('CLM_HISTORY') || '[]');
-        list.unshift(rec);
-        if (list.length > 25) list = list.slice(0, 25);
-        localStorage.setItem('CLM_HISTORY', JSON.stringify(list));
-        renderHistory(list);
-      } catch(e){}
+        let history = JSON.parse(localStorage.getItem('MARINA_CERT_HISTORY') || '[]');
+        history.unshift(record);
+        if (history.length > 30) history = history.slice(0, 30);
+        localStorage.setItem('MARINA_CERT_HISTORY', JSON.stringify(history));
+        renderHistory(history);
+      } catch (e) {}
     }
 
     function loadHistory() {
       try {
-        const list = JSON.parse(localStorage.getItem('CLM_HISTORY') || '[]');
-        renderHistory(list);
-      } catch(e){}
+        const history = JSON.parse(localStorage.getItem('MARINA_CERT_HISTORY') || '[]');
+        renderHistory(history);
+      } catch (e) {}
     }
 
     function renderHistory(list) {
       const tbody = document.getElementById('history-tbody');
-      const count = document.getElementById('history-count');
-      if (count) count.textContent = list.length;
+      const countEl = document.getElementById('history-count');
+      if (countEl) countEl.textContent = list.length;
       if (!tbody) return;
+
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-xs text-slate-400">No hay folios emitidos todavía.</td></tr>`;
+        tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-xs text-[#67737a]">No hay folios emitidos en este dispositivo.</td></tr>';
         return;
       }
-      tbody.innerHTML = list.map(r => `
-        <tr class="border-b border-white/5 hover:bg-white/5 text-xs">
-          <td class="py-2.5 px-3 font-mono font-bold text-amber-200">${r.folio}</td>
-          <td class="py-2.5 px-3 font-medium text-white">${r.name}</td>
-          <td class="py-2.5 px-3 text-slate-300 truncate max-w-[200px]">${r.promo}</td>
-          <td class="py-2.5 px-3 text-slate-400">${r.expiry}</td>
-          <td class="py-2.5 px-3 text-right">
-            <span class="inline-block px-2 py-0.5 rounded text-[9px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">Uso Único</span>
-          </td>
+
+      tbody.innerHTML = list.map(item => `
+        <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+          <td class="py-2.5 px-3 font-mono font-bold text-[#b7a387]">${item.folio}</td>
+          <td class="py-2.5 px-3 text-white font-medium">${item.name}</td>
+          <td class="py-2.5 px-3 text-[#c4ced3]">${item.promo}</td>
+          <td class="py-2.5 px-3 font-mono text-[#ece5d8]">${item.expiry}</td>
         </tr>
       `).join('');
     }
   </script>
+
 </body>
 </html>
